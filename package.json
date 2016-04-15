@@ -5,16 +5,27 @@
   "main": "index.js",
   "dependencies": {},
   "devDependencies": {
+    "benchmark": "^2.1.0",
+    "eslint": "^2.7.0",
+    "eslint-config-mourner": "^2.0.1",
     "turf": "^2.0.2"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "eslint index.js"
+  },
+  "eslintConfig": {
+    "extends": "mourner"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/mapbox/cheap-ruler.git"
   },
-  "keywords": ["geospatial", "measurement", "approximation", "distance"],
+  "keywords": [
+    "geospatial",
+    "measurement",
+    "approximation",
+    "distance"
+  ],
   "author": "Vladimir Agafonkin",
   "license": "ISC",
   "bugs": {

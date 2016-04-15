@@ -7,7 +7,7 @@ function cheapRuler(lat, units) {
 }
 
 cheapRuler.fromTile = function (y, z, units) {
-    var n = Math.PI * (1 - 2 * (y - 0.5) / Math.pow(2, z));
+    var n = Math.PI * (1 - 2 * (y + 0.5) / Math.pow(2, z));
     var lat = Math.atan(0.5 * (Math.exp(n) - Math.exp(-n))) * 180 / Math.PI;
     return new CheapRuler(lat, units);
 };
@@ -15,17 +15,14 @@ cheapRuler.fromTile = function (y, z, units) {
 function CheapRuler(lat, units) {
     if (lat === undefined) throw new Error('No latitude given.');
 
-    this.d = (units === 'miles' ? 24901.55 : 40075.16) / 360; // units per degree on equator
-    this.e = Math.cos(lat * Math.PI / 180); // longitude correction from latitude
+    // units per degree on equator
+    this.d = (units === 'miles' ? 24901.55 : 40075.16) / 360;
+
+    // longitude correction based on latitude
+    this.e = Math.cos(lat * Math.PI / 180);
 }
 
 CheapRuler.prototype = {
-    distanceSq: function (a, b) {
-        var dx = (a[0] - b[0]) * this.e;
-        var dy = a[1] - b[1];
-        return (dx * dx + dy * dy) * this.d * this.d;
-    },
-
     distance: function (a, b) {
         var dx = (a[0] - b[0]) * this.e;
         var dy = a[1] - b[1];
