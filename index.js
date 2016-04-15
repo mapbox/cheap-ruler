@@ -55,5 +55,16 @@ CheapRuler.prototype = {
             p[0] + h,
             p[1] + v
         ];
+    },
+
+    bufferBBox: function (bbox, buffer) {
+        var v = buffer / this.d;
+        var h = v / this.e;
+        return [
+            bbox[0] - h,
+            bbox[1] - v,
+            bbox[2] + h,
+            bbox[3] + v
+        ];
     }
 };

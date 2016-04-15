@@ -41,3 +41,7 @@ Given a point, returns a bounding box object (`[w, s, e, n]`) created from the g
 ```js
 var bbox = ruler.bufferPoint([30.5, 50.5], 0.01);
 ```
+
+#### bufferBBox(bbox, buffer)
+
+Given a bounding box, returns the box buffered by a given distance.
