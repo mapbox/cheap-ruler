@@ -9,7 +9,6 @@ function cheapRuler(lat, units) {
 cheapRuler.fromTile = function (y, z, units) {
     var n = Math.PI * (1 - 2 * (y - 0.5) / Math.pow(2, z));
     var lat = Math.atan(0.5 * (Math.exp(n) - Math.exp(-n))) * 180 / Math.PI;
-    console.log(lat);
     return new CheapRuler(lat, units);
 };
 
