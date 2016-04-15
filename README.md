@@ -1,13 +1,15 @@
-## cheap-ruler
+# cheap-ruler
 
 A collection of fast approximations to common geographic measurements. Useful for speeding up analysis scripts when measuring things on a road scale.
 
-### Usage
+## Usage
 
 ```js
 var ruler = cheapRuler(35.05, 'miles');
 var distance = ruler.distance([30.51, 50.32], [30.52, 50.312]);
 ```
+
+### Creating a ruler object
 
 #### cheapRuler(latitude[, units])
 
@@ -22,15 +24,17 @@ Creates a ruler object from tile coordinates (`y` and `z`). Convenient in `tile-
 var ruler = cheapRuler.fromTile(1567, 12);
 ```
 
-#### ruler.distance(a, b)
+### Ruler methods
+
+#### distance(a, b)
 
 Given two points of the form `[x, y]`, returns the distance. Typically within 0.1% of `turf.distance` values but 20–25 times faster.
 
-#### ruler.bearing(a, b)
+#### bearing(a, b)
 
 Returns the bearing between two points in angles. Typically within 0.001% of `turf.bearing` but 3–4 times faster.
 
-#### ruler.bufferPoint(p, buffer)
+#### bufferPoint(p, buffer)
 
 Given a point, returns a bounding box object (`[w, s, e, n]`) created from the given point buffered by a given distance.
 
