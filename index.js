@@ -66,5 +66,12 @@ CheapRuler.prototype = {
             bbox[2] + h,
             bbox[3] + v
         ];
+    },
+
+    insideBBox: function (p, bbox) {
+        return p[0] >= bbox[0] &&
+               p[0] <= bbox[2] &&
+               p[1] >= bbox[1] &&
+               p[1] <= bbox[3];
     }
 };

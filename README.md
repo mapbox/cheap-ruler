@@ -1,6 +1,8 @@
 # cheap-ruler
 
-A collection of fast approximations to common geographic measurements. Useful for speeding up analysis scripts when measuring things on a road scale.
+A collection of fast approximations to common geographic measurements, along with some utility functions.
+Useful for speeding up analysis scripts when measuring things on a city scale
+by replacing expensive [Turf](http://turfjs.org/) calls in key places.
 
 ## Usage
 
@@ -30,6 +32,10 @@ var ruler = cheapRuler.fromTile(1567, 12);
 
 Given two points of the form `[x, y]`, returns the distance. Typically within 0.1% of `turf.distance` values but 20–25 times faster.
 
+#### lineDistance(points)
+
+Given an array of points, returns the total line distance. Typically within 0.1% of `turf.lineDistance` values but 20–25 times faster.
+
 #### bearing(a, b)
 
 Returns the bearing between two points in angles. Typically within 0.001% of `turf.bearing` but 3–4 times faster.
@@ -45,3 +51,7 @@ var bbox = ruler.bufferPoint([30.5, 50.5], 0.01);
 #### bufferBBox(bbox, buffer)
 
 Given a bounding box, returns the box buffered by a given distance.
+
+#### insideBBox(p, bbox)
+
+Returns true if the given point is inside in the given bounding box, otherwise false.
