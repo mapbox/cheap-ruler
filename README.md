@@ -24,15 +24,11 @@ var ruler = cheapRuler.fromTile(1567, 12);
 
 #### ruler.distance(a, b)
 
-Given two points of the form `[x, y]`, returns the distance. Typically within 0.1% of `turf.distance` values but 20 times faster.
-
-#### ruler.distanceSq(a, b)
-
-Returns the squared distance between two points.
+Given two points of the form `[x, y]`, returns the distance. Typically within 0.1% of `turf.distance` values but 20–25 times faster.
 
 #### ruler.bearing(a, b)
 
-Returns the bearing between two points in angles. Typically within 0.001% of `turf.bearing` but 3-5 times faster.
+Returns the bearing between two points in angles. Typically within 0.001% of `turf.bearing` but 3–4 times faster.
 
 #### ruler.bufferPoint(p, buffer)
 
