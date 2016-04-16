@@ -48,6 +48,7 @@ Returns the bearing between two points in angles. Typically within 0.001% of `tu
 #### bufferPoint(p, buffer)
 
 Given a point, returns a bounding box object (`[w, s, e, n]`) created from the given point buffered by a given distance.
+This is about _220 times faster_ than creating a bounding box with two diagonal `turf.destination` calls.
 
 ```js
 var bbox = ruler.bufferPoint([30.5, 50.5], 0.01);
