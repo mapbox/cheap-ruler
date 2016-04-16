@@ -1,15 +1,20 @@
 # cheap-ruler
 
 A collection of fast approximations to common geographic measurements, along with some utility functions.
-Useful for speeding up analysis scripts when measuring things on a city scale
-by replacing expensive [Turf](http://turfjs.org/) calls in key places.
+Useful for speeding up analysis scripts when measuring things on a city scale,
+replacing [Turf](http://turfjs.org/) calls in key places.
 
 ## Usage
 
 ```js
 var ruler = cheapRuler(35.05, 'miles');
+
 var distance = ruler.distance([30.51, 50.32], [30.52, 50.312]);
+var lineLength = ruler.lineDistance(line.geometry.coordinates);
+var bbox = ruler.bufferPoint([30.5, 50.5], 0.01);
 ```
+
+**Note**: to get the full performance benefit, create the ruler object once per an area of calculation (such as a tile), and then reuse it as much as possible.
 
 ### Creating a ruler object
 
