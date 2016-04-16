@@ -8,10 +8,12 @@
     "benchmark": "^2.1.0",
     "eslint": "^2.7.0",
     "eslint-config-mourner": "^2.0.1",
+    "tape": "^4.5.1",
     "turf": "^2.0.2"
   },
   "scripts": {
-    "test": "eslint index.js bench"
+    "pretest": "eslint index.js bench test/test.js",
+    "test": "tape test/test.js"
   },
   "eslintConfig": {
     "extends": "mourner"
