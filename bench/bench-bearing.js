@@ -1,3 +1,5 @@
+'use strict';
+
 var Benchmark = require('benchmark');
 
 var cheapRuler = require('../');
@@ -9,7 +11,7 @@ var ruler = cheapRuler(32.8351);
 var suite = new Benchmark.Suite();
 
 suite
-.add('turf.bearing', function() {
+.add('turf.bearing', function () {
     for (var i = 0; i < lines.length; i++) {
         var line = lines[i];
         for (var j = 0; j < line.length - 1; j++) {
@@ -17,7 +19,7 @@ suite
         }
     }
 })
-.add('ruler.bearing', function() {
+.add('ruler.bearing', function () {
     for (var i = 0; i < lines.length; i++) {
         var line = lines[i];
         for (var j = 0; j < line.length - 1; j++) {
@@ -25,7 +27,7 @@ suite
         }
     }
 })
-.on('cycle', function(event) {
-  console.log(String(event.target));
+.on('cycle', function (event) {
+    console.log(String(event.target));
 })
 .run();

@@ -11,7 +11,7 @@
     "turf": "^2.0.2"
   },
   "scripts": {
-    "test": "eslint index.js"
+    "test": "eslint index.js bench"
   },
   "eslintConfig": {
     "extends": "mourner"
