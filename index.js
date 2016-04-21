@@ -73,5 +73,44 @@ CheapRuler.prototype = {
                p[0] <= bbox[2] &&
                p[1] >= bbox[1] &&
                p[1] <= bbox[3];
+    },
+
+    pointOnLine(line, p) {
+        var minDist = Infinity;
+        var minX, minY;
+
+        for (var i = 0; i < line.length - 1; i++) {
+
+            var x = line[i][0];
+            var y = line[i][1];
+            var dx = (line[i + 1][0] - x) * this.e;
+            var dy = line[i + 1][1] - y;
+
+            if (dx !== 0 || dy !== 0) {
+
+                var t = ((p[0] - x) * this.e * dx + (p[1] - y) * dy) / (dx * dx + dy * dy);
+
+                if (t > 1) {
+                    x = line[i + 1][0];
+                    y = line[i + 1][1];
+
+                } else if (t > 0) {
+                    x += dx * t / this.e;
+                    y += dy * t;
+                }
+            }
+
+            dx = (p[0] - x) * this.e;
+            dy = p[1] - y;
+
+            var sqDist = dx * dx + dy * dy;
+            if (sqDist < minDist) {
+                minDist = sqDist;
+                minX = x;
+                minY = y;
+            }
+        }
+
+        return [minX, minY];
     }
 };

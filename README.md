@@ -35,7 +35,7 @@ var ruler = cheapRuler.fromTile(1567, 12);
 
 #### distance(a, b)
 
-Given two points of the form `[x, y]`, returns the distance. Typically within 0.1% of `turf.distance` values but 20–25 times faster.
+Given two points of the form `[x, y]`, returns the distance. Typically within 0.1% of `turf.distance` values (on small distances and far away from poles), but 20–25 times faster.
 
 #### lineDistance(points)
 
@@ -44,6 +44,10 @@ Given an array of points, returns the total line distance. Typically within 0.1%
 #### bearing(a, b)
 
 Returns the bearing between two points in angles. Typically within 0.01% of `turf.bearing` but 3–4 times faster.
+
+#### pointOnLine(line, p)
+
+Returns the closest point on the line from the given point. Line is an array of points. 80-90 times faster than `turf.pointOnLine`.
 
 #### bufferPoint(p, buffer)
 
