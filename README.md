@@ -88,3 +88,8 @@ Given a bounding box, returns the box buffered by a given distance.
 #### insideBBox(p, bbox)
 
 Returns true if the given point is inside in the given bounding box, otherwise false.
+
+## Install
+
+- NPM: `npm install chep-ruler`
+- Browser build: https://npmcdn.com/cheap-ruler@1.2.0/cheap-ruler.js
