@@ -91,7 +91,7 @@ CheapRuler.prototype = {
 
     pointOnLine: function (line, p) {
         var minDist = Infinity;
-        var minX, minY, minI;
+        var minX, minY, minI, minT;
 
         for (var i = 0; i < line.length - 1; i++) {
 
@@ -123,31 +123,40 @@ CheapRuler.prototype = {
                 minX = x;
                 minY = y;
                 minI = i;
+                minT = t;
             }
         }
 
         return {
             point: [minX, minY],
-            index: minI
+            index: minI,
+            t: minT
         };
     },
 
     lineSlice: function (start, stop, line) {
         var p1 = this.pointOnLine(line, start);
         var p2 = this.pointOnLine(line, stop);
+
+        if (p1.index > p2.index || (p1.index === p2.index && p1.t > p2.t)) {
+            var tmp = p1;
+            p1 = p2;
+            p2 = tmp;
+        }
+
         var slice = [p1.point];
 
         var l = p1.index + 1;
         var r = p2.index;
 
-        if (line[l][0] !== slice[0][0] || line[l][1] !== slice[0][1])
+        if (!equals(line[l], slice[0]) && l <= r)
             slice.push(line[l]);
 
-        for (var i = l + 1; i <= p2.index; i++) {
+        for (var i = l + 1; i <= r; i++) {
             slice.push(line[i]);
         }
 
-        if (line[r][0] !== p2.point[0] || line[r][1] !== p2.point[1])
+        if (!equals(line[r], p2.point))
             slice.push(p2.point);
 
         return slice;
@@ -189,3 +198,7 @@ CheapRuler.prototype = {
         ];
     }
 };
+
+function equals(a, b) {
+    return a[0] === b[0] && a[1] === b[1];
+}

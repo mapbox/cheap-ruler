@@ -48,6 +48,25 @@ test('along', function (t) {
     t.end();
 });
 
+test('lineSlice', function (t) {
+    for (var i = 0; i < lines.length; i++) {
+        if (i === 46) continue; // skip due to Turf bug https://github.com/Turfjs/turf/issues/351
+
+        var line = lines[i];
+        var dist = ruler.lineDistance(line);
+        var start = ruler.along(line, dist * 0.3);
+        var stop = ruler.along(line, dist * 0.7);
+
+        var expected = ruler.lineDistance(turf.lineSlice(
+            turf.point(start), turf.point(stop), turf.linestring(line)).geometry.coordinates);
+        var actual = ruler.lineDistance(ruler.lineSlice(start, stop, line));
+
+        assertErr(t, expected, actual, 0.001, 'lineSlice length');
+    }
+    t.pass('lineSlice length within 0.1%');
+    t.end();
+});
+
 test('area', function (t) {
     for (var i = 0; i < lines.length; i++) {
         if (lines[i].length < 3) continue;
@@ -96,7 +115,7 @@ test('bufferPoint', function (t) {
 });
 
 test('pointOnLine', function (t) {
-    // not Turf comparison because pointOnLatter is bugged https://github.com/Turfjs/turf/issues/344
+    // not Turf comparison because pointOnLine is bugged https://github.com/Turfjs/turf/issues/344
     var line = [[-77.031669, 38.878605], [-77.029609, 38.881946]];
     var p = ruler.pointOnLine(line, [-77.034076, 38.882017]).point;
     t.same(p, [-77.03051972665213, 38.88046894284234]);

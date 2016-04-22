@@ -67,11 +67,6 @@ var area = ruler.area([[
 Returns the bearing between two points in angles.
 3–4 times faster than `turf.bearing`.
 
-#### pointOnLine(line, p)
-
-Returns the closest point on the line from the given point.
-80–90 times faster than `turf.pointOnLine`.
-
 #### along(line, dist)
 
 Returns the point at a specified distance along the line.
@@ -81,6 +76,17 @@ Returns the point at a specified distance along the line.
 
 Returns a new point given distance and bearing from the starting point.
 6–7 times faster than `turf.destination`.
+
+#### pointOnLine(line, p)
+
+Returns an object of the form `{point, index}` where `point` is closest point on the line from the given point,
+and `index` is the start index of the segment with the closest point.
+70–75 times faster than `turf.pointOnLine`.
+
+#### lineSlice(start, stop, line)
+
+Returns a part of the given line between the start and the stop points (or their closest points on the line).
+50–60 times faster than `turf.lineSlice`.
 
 #### bufferPoint(p, buffer)
 
