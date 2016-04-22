@@ -75,7 +75,7 @@ CheapRuler.prototype = {
                p[1] <= bbox[3];
     },
 
-    pointOnLine(line, p) {
+    pointOnLine: function (line, p) {
         var minDist = Infinity;
         var minX, minY;
 
