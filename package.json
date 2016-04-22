@@ -6,6 +6,7 @@
   "dependencies": {},
   "devDependencies": {
     "benchmark": "^2.1.0",
+    "browserify": "^13.0.0",
     "eslint": "^2.7.0",
     "eslint-config-mourner": "^2.0.1",
     "tape": "^4.5.1",
@@ -13,7 +14,9 @@
   },
   "scripts": {
     "pretest": "eslint index.js bench test/test.js",
-    "test": "tape test/test.js"
+    "test": "tape test/test.js",
+    "build": "browserify index.js -s cheapRuler > cheap-ruler.js",
+    "prepublish": "npm run build"
   },
   "eslintConfig": {
     "extends": "mourner"
