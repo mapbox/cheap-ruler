@@ -132,6 +132,27 @@ CheapRuler.prototype = {
         };
     },
 
+    lineSlice: function (start, stop, line) {
+        var p1 = this.pointOnLine(line, start);
+        var p2 = this.pointOnLine(line, stop);
+        var slice = [p1.point];
+
+        var l = p1.index + 1;
+        var r = p2.index;
+
+        if (line[l][0] !== slice[0][0] || line[l][1] !== slice[0][1])
+            slice.push(line[l]);
+
+        for (var i = l + 1; i <= p2.index; i++) {
+            slice.push(line[i]);
+        }
+
+        if (line[r][0] !== p2.point[0] || line[r][1] !== p2.point[1])
+            slice.push(p2.point);
+
+        return slice;
+    },
+
     along: function (line, dist) {
         var sum = 0;
 
