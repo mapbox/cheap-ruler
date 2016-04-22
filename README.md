@@ -41,9 +41,9 @@ var ruler = cheapRuler.fromTile(1567, 12);
 Given two points of the form `[x, y]`, returns the distance.
 20–25 times faster than `turf.distance`.
 
-#### lineDistance(points)
+#### lineDistance(line)
 
-Given an array of points, returns the total line distance.
+Given a line (an array of points), returns the total line distance.
 20–25 times faster than `turf.lineDistance`.
 
 #### area(polygon)
@@ -69,8 +69,13 @@ Returns the bearing between two points in angles.
 
 #### pointOnLine(line, p)
 
-Returns the closest point on the line from the given point. Line is an array of points.
+Returns the closest point on the line from the given point.
 80–90 times faster than `turf.pointOnLine`.
+
+#### along(line, dist)
+
+Returns the point at a specified distance along the line.
+20-25 times faster than `turf.along`.
 
 #### bufferPoint(p, buffer)
 

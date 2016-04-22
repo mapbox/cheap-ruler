@@ -126,5 +126,32 @@ CheapRuler.prototype = {
         }
 
         return [minX, minY];
+    },
+
+    along: function (line, dist) {
+        var sum = 0;
+
+        if (dist <= 0) return line[0];
+
+        for (var i = 0; i < line.length - 1; i++) {
+            var p0 = line[i];
+            var p = line[i + 1];
+            var d = this.distance(p0, p);
+
+            sum += d;
+
+            if (sum > dist) {
+                var t = (dist - (sum - d)) / d;
+                var dx = p[0] - p0[0];
+                var dy = p[1] - p0[1];
+
+                return [
+                    p0[0] + dx * t,
+                    p0[1] + dy * t
+                ];
+            }
+        }
+
+        return line[line.length - 1];
     }
 };

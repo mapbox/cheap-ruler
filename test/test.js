@@ -35,6 +35,19 @@ test('lineDistance', function (t) {
     t.end();
 });
 
+test('along', function (t) {
+    for (var i = 0; i < lines.length; i++) {
+        var line = turf.linestring(lines[i]);
+        var dist = turf.lineDistance(line) / 2;
+        var expected = turf.along(line, dist, 'kilometers').geometry.coordinates;
+        var actual = ruler.along(lines[i], dist);
+        assertErr(t, expected[0], actual[0], 2e-7, 'along longitude');
+        assertErr(t, expected[1], actual[1], 2e-7, 'along latitude');
+    }
+    t.pass('lineDistance within 0.1%');
+    t.end();
+});
+
 test('area', function (t) {
     for (var i = 0; i < lines.length; i++) {
         if (lines[i].length < 3) continue;
