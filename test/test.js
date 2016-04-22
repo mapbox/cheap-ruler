@@ -70,6 +70,18 @@ test('bearing', function (t) {
     t.end();
 });
 
+test('destination', function (t) {
+    for (var i = 0; i < points.length; i++) {
+        var bearing = (i % 360) - 180;
+        var expected = turf.destination(turf.point(points[i]), 1.0, bearing, 'kilometers').geometry.coordinates;
+        var actual = ruler.destination(points[i], 1.0, bearing);
+        assertErr(t, expected[0], actual[0], 3e-7, 'destination longitude');
+        assertErr(t, expected[1], actual[1], 3e-7, 'destination latitude');
+    }
+    t.pass('destination within 3e-7');
+    t.end();
+});
+
 test('bufferPoint', function (t) {
     for (var i = 0; i < points.length; i++) {
         var expected = turfPointBuffer(points[i], 0.01);

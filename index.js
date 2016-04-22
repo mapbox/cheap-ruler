@@ -153,5 +153,14 @@ CheapRuler.prototype = {
         }
 
         return line[line.length - 1];
+    },
+
+    destination: function (p, dist, bearing) {
+        var a = (90 - bearing) * Math.PI / 180;
+        var d = dist / this.d;
+        return [
+            p[0] + d * Math.cos(a) / this.e,
+            p[1] + d * Math.sin(a)
+        ];
     }
 };

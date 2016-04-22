@@ -77,6 +77,11 @@ Returns the closest point on the line from the given point.
 Returns the point at a specified distance along the line.
 20-25 times faster than `turf.along`.
 
+#### destination(p, dist, bearing)
+
+Returns a new point given distance and bearing from the starting point.
+6–7 times faster than `turf.destination`.
+
 #### bufferPoint(p, buffer)
 
 Given a point, returns a bounding box object (`[w, s, e, n]`) created from the given point buffered by a given distance.
