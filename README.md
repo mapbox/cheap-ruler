@@ -14,6 +14,9 @@ var lineLength = ruler.lineDistance(line.geometry.coordinates);
 var bbox = ruler.bufferPoint([30.5, 50.5], 0.01);
 ```
 
+For a city scale (a few dozen miles) and far away from poles,
+the results are typically within 0.1% of corresponding Turf functions.
+
 **Note**: to get the full performance benefit, create the ruler object once per an area of calculation (such as a tile), and then reuse it as much as possible.
 
 ### Creating a ruler object
@@ -35,24 +38,44 @@ var ruler = cheapRuler.fromTile(1567, 12);
 
 #### distance(a, b)
 
-Given two points of the form `[x, y]`, returns the distance. Typically within 0.1% of `turf.distance` values (on small distances and far away from poles), but 20–25 times faster.
+Given two points of the form `[x, y]`, returns the distance.
+20–25 times faster than `turf.distance`.
 
 #### lineDistance(points)
 
-Given an array of points, returns the total line distance. Typically within 0.1% of `turf.lineDistance` values but 20–25 times faster.
+Given an array of points, returns the total line distance.
+20–25 times faster than `turf.lineDistance`.
+
+#### area(polygon)
+
+Given a polygon (an array of rings, where each ring is an array of points), returns the area.
+3–4 times faster than `turf.area`. Note that it returns the value in the specified units
+(square kilometers by default) rather than square meters as in `turf.area`.
+
+```js
+var area = ruler.area([[
+    [-67.031, 50.458],
+    [-67.031, 50.534],
+    [-66.929, 50.534],
+    [-66.929, 50.458],
+    [-67.031, 50.458]
+]]);
+```
 
 #### bearing(a, b)
 
-Returns the bearing between two points in angles. Typically within 0.01% of `turf.bearing` but 3–4 times faster.
+Returns the bearing between two points in angles.
+3–4 times faster than `turf.bearing`.
 
 #### pointOnLine(line, p)
 
-Returns the closest point on the line from the given point. Line is an array of points. 80-90 times faster than `turf.pointOnLine`.
+Returns the closest point on the line from the given point. Line is an array of points.
+80–90 times faster than `turf.pointOnLine`.
 
 #### bufferPoint(p, buffer)
 
 Given a point, returns a bounding box object (`[w, s, e, n]`) created from the given point buffered by a given distance.
-This is about _200 times faster_ than creating a bounding box with two diagonal `turf.destination` calls.
+About _200 times faster_ than creating a bounding box with two diagonal `turf.destination` calls.
 
 ```js
 var bbox = ruler.bufferPoint([30.5, 50.5], 0.01);

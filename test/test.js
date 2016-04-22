@@ -35,6 +35,18 @@ test('lineDistance', function (t) {
     t.end();
 });
 
+test('area', function (t) {
+    for (var i = 0; i < lines.length; i++) {
+        if (lines[i].length < 3) continue;
+        var poly = turf.polygon([lines[i].concat([lines[i][0]])]);
+        var expected = turf.area(poly) / 1e6;
+        var actual = ruler.area([lines[i]]);
+        assertErr(t, expected, actual, 0.0002, 'area');
+    }
+    t.pass('area within 0.02%');
+    t.end();
+});
+
 test('bearing', function (t) {
     for (var i = 0; i < points.length - 1; i++) {
         var expected = turf.bearing(turf.point(points[i]), turf.point(points[i + 1]));

@@ -37,6 +37,20 @@ CheapRuler.prototype = {
         return total;
     },
 
+    area: function (polygon) {
+        var sum = 0;
+
+        for (var i = 0; i < polygon.length; i++) {
+            var ring = polygon[i];
+
+            for (var j = 0, len = ring.length, k = len - 1; j < len; k = j++) {
+                sum += (ring[j][0] - ring[k][0]) * (ring[j][1] + ring[k][1]) * (i ? -1 : 1);
+            }
+        }
+
+        return (Math.abs(sum) / 2) * this.e * this.d * this.d;
+    },
+
     bearing: function (a, b) {
         var dx = (b[0] - a[0]) * this.e;
         var dy = b[1] - a[1];
