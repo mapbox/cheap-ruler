@@ -98,7 +98,7 @@ test('bufferPoint', function (t) {
 test('pointOnLine', function (t) {
     // not Turf comparison because pointOnLatter is bugged https://github.com/Turfjs/turf/issues/344
     var line = [[-77.031669, 38.878605], [-77.029609, 38.881946]];
-    var p = ruler.pointOnLine(line, [-77.034076, 38.882017]);
+    var p = ruler.pointOnLine(line, [-77.034076, 38.882017]).point;
     t.same(p, [-77.03051972665213, 38.88046894284234]);
     t.end();
 });

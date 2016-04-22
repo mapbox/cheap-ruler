@@ -91,7 +91,7 @@ CheapRuler.prototype = {
 
     pointOnLine: function (line, p) {
         var minDist = Infinity;
-        var minX, minY;
+        var minX, minY, minI;
 
         for (var i = 0; i < line.length - 1; i++) {
 
@@ -122,10 +122,14 @@ CheapRuler.prototype = {
                 minDist = sqDist;
                 minX = x;
                 minY = y;
+                minI = i;
             }
         }
 
-        return [minX, minY];
+        return {
+            point: [minX, minY],
+            index: minI
+        };
     },
 
     along: function (line, dist) {
