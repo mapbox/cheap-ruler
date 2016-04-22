@@ -96,5 +96,5 @@ Returns true if the given point is inside in the given bounding box, otherwise f
 
 ## Install
 
-- NPM: `npm install chep-ruler`
+- NPM: `npm install cheap-ruler`
 - Browser build (CDN): https://npmcdn.com/cheap-ruler@1.3.0/cheap-ruler.js
