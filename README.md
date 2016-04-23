@@ -7,6 +7,25 @@ replacing [Turf](http://turfjs.org/) calls in key places.
 For a city scale (a few dozen miles) and far away from poles,
 the results are typically within 0.1% of corresponding Turf functions.
 
+## Performance
+
+Compared to corresponding Turf methods:
+
+- `distance`: ~20–25x faster
+- `bearing`: ~3–4x faster
+- `destination`: ~6–7x faster
+- `lineDistance`: ~20–25x faster
+- `area`: ~3–4x faster
+- `along`: ~20-25x faster
+- `pointOnLine`: 70–75x faster
+- `lineSlice`: 50–60x faster
+
+Additional utility methods:
+
+- `bufferPoint`: ~200x faster than creating a bounding box with two diagonal `turf.destination` calls
+- `bufferBBox`: likewise
+- `insideBBox`: ~25x faster than `turf.inside(turf.point(p), turf.bboxPolygon(bbox))`
+
 ## Usage
 
 ```js
@@ -39,7 +58,6 @@ var ruler = cheapRuler.fromTile(1567, 12);
 #### distance(a, b)
 
 Given two points of the form `[x, y]`, returns the distance.
-20–25 times faster than `turf.distance`.
 
 ```js
 var distance = ruler.distance([30.5, 50.5], [30.51, 50.49]);
@@ -48,7 +66,6 @@ var distance = ruler.distance([30.5, 50.5], [30.51, 50.49]);
 #### bearing(a, b)
 
 Returns the bearing between two points in angles.
-3–4 times faster than `turf.bearing`.
 
 ```js
 var bearing = ruler.bearing([30.5, 50.5], [30.51, 50.49]);
@@ -57,7 +74,6 @@ var bearing = ruler.bearing([30.5, 50.5], [30.51, 50.49]);
 #### destination(p, dist, bearing)
 
 Returns a new point given distance and bearing from the starting point.
-6–7 times faster than `turf.destination`.
 
 ```js
 var point = ruler.destination([30.5, 50.5], 0.1, 90);
@@ -66,7 +82,6 @@ var point = ruler.destination([30.5, 50.5], 0.1, 90);
 #### lineDistance(line)
 
 Given a line (an array of points), returns the total line distance.
-20–25 times faster than `turf.lineDistance`.
 
 ```js
 var length = ruler.lineDistance([
@@ -78,7 +93,7 @@ var length = ruler.lineDistance([
 #### area(polygon)
 
 Given a polygon (an array of rings, where each ring is an array of points), returns the area.
-3–4 times faster than `turf.area`. Note that it returns the value in the specified units
+Note that it returns the value in the specified units
 (square kilometers by default) rather than square meters as in `turf.area`.
 
 ```js
@@ -91,7 +106,6 @@ var area = ruler.area([[
 #### along(line, dist)
 
 Returns the point at a specified distance along the line.
-20-25 times faster than `turf.along`.
 
 ```js
 var point = ruler.along(line, 2.5);
@@ -101,7 +115,6 @@ var point = ruler.along(line, 2.5);
 
 Returns an object of the form `{point, index}` where `point` is closest point on the line from the given point,
 and `index` is the start index of the segment with the closest point.
-70–75 times faster than `turf.pointOnLine`.
 
 ```js
 var point = ruler.pointOnLine(line, [-67.04, 50.5]).point;
@@ -110,14 +123,14 @@ var point = ruler.pointOnLine(line, [-67.04, 50.5]).point;
 #### lineSlice(start, stop, line)
 
 Returns a part of the given line between the start and the stop points (or their closest points on the line).
-50–60 times faster than `turf.lineSlice`.
 
+```js
 ruler.pointOnLine([-67.04, 50.5], [-67.05, 50.56], line)
+```
 
 #### bufferPoint(p, buffer)
 
 Given a point, returns a bounding box object (`[w, s, e, n]`) created from the given point buffered by a given distance.
-About _200 times faster_ than creating a bounding box with two diagonal `turf.destination` calls.
 
 ```js
 var bbox = ruler.bufferPoint([30.5, 50.5], 0.01);
