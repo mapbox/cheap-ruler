@@ -11,12 +11,12 @@ the results are typically within 0.1% of corresponding Turf functions.
 
 Compared to corresponding Turf methods:
 
-- `distance`: ~20–25x faster
-- `bearing`: ~3–4x faster
-- `destination`: ~6–7x faster
-- `lineDistance`: ~20–25x faster
-- `area`: ~3–4x faster
-- `along`: ~20-25x faster
+- `distance`: 20–25x faster
+- `bearing`: 3–4x faster
+- `destination`: 6–7x faster
+- `lineDistance`: 20–25x faster
+- `area`: 3–4x faster
+- `along`: 20-25x faster
 - `pointOnLine`: 70–75x faster
 - `lineSlice`: 50–60x faster
 
