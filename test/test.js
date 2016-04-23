@@ -15,6 +15,13 @@ function assertErr(t, actual, expected, maxErr, description) {
     if (err > maxErr) t.fail(description + ', err: ' + err);
 }
 
+test('cheapRuler constructor', function (t) {
+    t.throws(function () {
+        createRuler();
+    }, 'errors without latitude');
+    t.end();
+});
+
 test('distance', function (t) {
     for (var i = 0; i < points.length - 1; i++) {
         var expected = turf.distance(turf.point(points[i]), turf.point(points[i + 1]));
@@ -82,6 +89,16 @@ test('along', function (t) {
     t.end();
 });
 
+test('along with dist <= 0', function (t) {
+    t.same(ruler.along(lines[0], -5), lines[0][0], 'first point');
+    t.end();
+});
+
+test('along with dist > length', function (t) {
+    t.same(ruler.along(lines[0], 1000), lines[0][lines[0].length - 1], 'last point');
+    t.end();
+});
+
 test('pointOnLine', function (t) {
     // not Turf comparison because pointOnLine is bugged https://github.com/Turfjs/turf/issues/344
     var line = [[-77.031669, 38.878605], [-77.029609, 38.881946]];
@@ -109,6 +126,16 @@ test('lineSlice', function (t) {
     t.end();
 });
 
+test('lineSlice reverse', function (t) {
+    var line = lines[0];
+    var dist = ruler.lineDistance(line);
+    var start = ruler.along(line, dist * 0.7);
+    var stop = ruler.along(line, dist * 0.3);
+    var actual = ruler.lineDistance(ruler.lineSlice(start, stop, line));
+    t.equal(actual, 0.018665535420681036, 'lineSlice reversed length');
+    t.end();
+});
+
 test('bufferPoint', function (t) {
     for (var i = 0; i < points.length; i++) {
         var expected = turfPointBuffer(points[i], 0.01);
@@ -125,7 +152,7 @@ test('bufferPoint', function (t) {
 test('bufferBBox', function (t) {
     var bbox = [30, 38, 40, 39];
     var bbox2 = ruler.bufferBBox(bbox, 1);
-    t.same(bbox2, [29.989308794440007, 37.991016879283826, 40.01069120555999, 39.008983120716174]);
+    t.same(bbox2, [29.989308794440007, 37.991016879283826, 40.01069120555999, 39.008983120716174], 'bufferBBox');
     t.end();
 });
 
@@ -133,6 +160,18 @@ test('insideBBox', function (t) {
     var bbox = [30, 38, 40, 39];
     t.ok(ruler.insideBBox([35, 38.5], bbox), 'insideBBox inside');
     t.notOk(ruler.insideBBox([45, 45], bbox), 'insideBBox outside');
+    t.end();
+});
+
+test('cheapRuler.fromTile', function (t) {
+    var ruler1 = createRuler(50.5);
+    var ruler2 = createRuler.fromTile(11041, 15);
+
+    var p1 = [30.5, 50.5];
+    var p2 = [30.51, 50.51];
+
+    assertErr(t, ruler1.distance(p1, p2), ruler2.distance(p1, p2), 2e-5, 'cheapRuler.fromTile distance');
+
     t.end();
 });
 

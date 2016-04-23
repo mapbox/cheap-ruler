@@ -9,6 +9,7 @@
     "browserify": "^13.0.0",
     "eslint": "^2.7.0",
     "eslint-config-mourner": "^2.0.1",
+    "istanbul": "^0.4.3",
     "tape": "^4.5.1",
     "turf": "^2.0.2"
   },
@@ -16,7 +17,8 @@
     "pretest": "eslint index.js bench test/test.js",
     "test": "tape test/test.js",
     "build": "browserify index.js -s cheapRuler > cheap-ruler.js",
-    "prepublish": "npm run build"
+    "prepublish": "npm run build",
+    "cov": "istanbul cover tape test/test.js"
   },
   "eslintConfig": {
     "extends": "mourner"
