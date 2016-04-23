@@ -41,6 +41,16 @@ var ruler = cheapRuler.fromTile(1567, 12);
 Given two points of the form `[x, y]`, returns the distance.
 20–25 times faster than `turf.distance`.
 
+#### bearing(a, b)
+
+Returns the bearing between two points in angles.
+3–4 times faster than `turf.bearing`.
+
+#### destination(p, dist, bearing)
+
+Returns a new point given distance and bearing from the starting point.
+6–7 times faster than `turf.destination`.
+
 #### lineDistance(line)
 
 Given a line (an array of points), returns the total line distance.
@@ -62,20 +72,10 @@ var area = ruler.area([[
 ]]);
 ```
 
-#### bearing(a, b)
-
-Returns the bearing between two points in angles.
-3–4 times faster than `turf.bearing`.
-
 #### along(line, dist)
 
 Returns the point at a specified distance along the line.
 20-25 times faster than `turf.along`.
-
-#### destination(p, dist, bearing)
-
-Returns a new point given distance and bearing from the starting point.
-6–7 times faster than `turf.destination`.
 
 #### pointOnLine(line, p)
 

@@ -29,6 +29,24 @@ CheapRuler.prototype = {
         return Math.sqrt(dx * dx + dy * dy) * this.d;
     },
 
+    bearing: function (a, b) {
+        var dx = (b[0] - a[0]) * this.e;
+        var dy = b[1] - a[1];
+        if (!dx && !dy) return 0;
+        var bearing = Math.atan2(-dy, dx) * 180 / Math.PI + 90;
+        if (bearing > 180) bearing -= 360;
+        return bearing;
+    },
+
+    destination: function (p, dist, bearing) {
+        var a = (90 - bearing) * Math.PI / 180;
+        var d = dist / this.d;
+        return [
+            p[0] + d * Math.cos(a) / this.e,
+            p[1] + d * Math.sin(a)
+        ];
+    },
+
     lineDistance: function (points) {
         var total = 0;
         for (var i = 0; i < points.length - 1; i++) {
@@ -51,42 +69,31 @@ CheapRuler.prototype = {
         return (Math.abs(sum) / 2) * this.e * this.d * this.d;
     },
 
-    bearing: function (a, b) {
-        var dx = (b[0] - a[0]) * this.e;
-        var dy = b[1] - a[1];
-        if (!dx && !dy) return 0;
-        var bearing = Math.atan2(-dy, dx) * 180 / Math.PI + 90;
-        if (bearing > 180) bearing -= 360;
-        return bearing;
-    },
+    along: function (line, dist) {
+        var sum = 0;
 
-    bufferPoint: function (p, buffer) {
-        var v = buffer / this.d;
-        var h = v / this.e;
-        return [
-            p[0] - h,
-            p[1] - v,
-            p[0] + h,
-            p[1] + v
-        ];
-    },
+        if (dist <= 0) return line[0];
 
-    bufferBBox: function (bbox, buffer) {
-        var v = buffer / this.d;
-        var h = v / this.e;
-        return [
-            bbox[0] - h,
-            bbox[1] - v,
-            bbox[2] + h,
-            bbox[3] + v
-        ];
-    },
+        for (var i = 0; i < line.length - 1; i++) {
+            var p0 = line[i];
+            var p = line[i + 1];
+            var d = this.distance(p0, p);
 
-    insideBBox: function (p, bbox) {
-        return p[0] >= bbox[0] &&
-               p[0] <= bbox[2] &&
-               p[1] >= bbox[1] &&
-               p[1] <= bbox[3];
+            sum += d;
+
+            if (sum > dist) {
+                var t = (dist - (sum - d)) / d;
+                var dx = p[0] - p0[0];
+                var dy = p[1] - p0[1];
+
+                return [
+                    p0[0] + dx * t,
+                    p0[1] + dy * t
+                ];
+            }
+        }
+
+        return line[line.length - 1];
     },
 
     pointOnLine: function (line, p) {
@@ -162,40 +169,33 @@ CheapRuler.prototype = {
         return slice;
     },
 
-    along: function (line, dist) {
-        var sum = 0;
-
-        if (dist <= 0) return line[0];
-
-        for (var i = 0; i < line.length - 1; i++) {
-            var p0 = line[i];
-            var p = line[i + 1];
-            var d = this.distance(p0, p);
-
-            sum += d;
-
-            if (sum > dist) {
-                var t = (dist - (sum - d)) / d;
-                var dx = p[0] - p0[0];
-                var dy = p[1] - p0[1];
-
-                return [
-                    p0[0] + dx * t,
-                    p0[1] + dy * t
-                ];
-            }
-        }
-
-        return line[line.length - 1];
+    bufferPoint: function (p, buffer) {
+        var v = buffer / this.d;
+        var h = v / this.e;
+        return [
+            p[0] - h,
+            p[1] - v,
+            p[0] + h,
+            p[1] + v
+        ];
     },
 
-    destination: function (p, dist, bearing) {
-        var a = (90 - bearing) * Math.PI / 180;
-        var d = dist / this.d;
+    bufferBBox: function (bbox, buffer) {
+        var v = buffer / this.d;
+        var h = v / this.e;
         return [
-            p[0] + d * Math.cos(a) / this.e,
-            p[1] + d * Math.sin(a)
+            bbox[0] - h,
+            bbox[1] - v,
+            bbox[2] + h,
+            bbox[3] + v
         ];
+    },
+
+    insideBBox: function (p, bbox) {
+        return p[0] >= bbox[0] &&
+               p[0] <= bbox[2] &&
+               p[1] >= bbox[1] &&
+               p[1] <= bbox[3];
     }
 };
 
