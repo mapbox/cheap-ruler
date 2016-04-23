@@ -9,22 +9,22 @@ the results are typically within 0.1% of corresponding Turf functions.
 
 ## Performance
 
-Compared to corresponding Turf methods:
+Compared to corresponding Turf methods (using Node v5.10):
 
-- `distance`: 20–25x faster
-- `bearing`: 3–4x faster
-- `destination`: 6–7x faster
-- `lineDistance`: 20–25x faster
-- `area`: 3–4x faster
-- `along`: 20-25x faster
-- `pointOnLine`: 70–75x faster
-- `lineSlice`: 50–60x faster
+- `distance`: ~26x faster
+- `bearing`: ~3.5x faster
+- `destination`: ~6.4x faster
+- `lineDistance`: ~26x faster
+- `area`: ~3.6x faster
+- `along`: ~21x faster
+- `pointOnLine`: ~72x faster
+- `lineSlice`: ~56x faster
 
 Additional utility methods:
 
-- `bufferPoint`: ~200x faster than creating a bounding box with two diagonal `turf.destination` calls
-- `bufferBBox`: likewise
-- `insideBBox`: ~25x faster than `turf.inside(turf.point(p), turf.bboxPolygon(bbox))`
+- `bufferPoint`: ~210x faster than creating a bounding box with two diagonal `turf.destination` calls
+- `bufferBBox`: ~210x faster (likewise)
+- `insideBBox`: ~24x faster than `turf.inside(turf.point(p), turf.bboxPolygon(bbox))`
 
 ## Usage
 

@@ -1,6 +1,6 @@
 'use strict';
 
-var Benchmark = require('benchmark');
+var runBench = require('./bench-run.js');
 
 var cheapRuler = require('../');
 var turf = require('turf');
@@ -13,20 +13,15 @@ var bboxes = points.map(function (p) {
     return ruler.bufferPoint(p, 0.1);
 });
 
-var suite = new Benchmark.Suite();
-
-suite
-.add('turf.inside + turf.bboxPolygon', function () {
-    for (var i = 0; i < points.length; i++) {
-        turf.inside(turf.point(points[i]), turf.bboxPolygon(bboxes[i]));
+runBench({
+    'turf.inside + turf.bboxPolygon': function () {
+        for (var i = 0; i < points.length; i++) {
+            turf.inside(turf.point(points[i]), turf.bboxPolygon(bboxes[i]));
+        }
+    },
+    'ruler.insideBBox': function () {
+        for (var i = 0; i < points.length; i++) {
+            ruler.insideBBox(points[i], bboxes[i]);
+        }
     }
-})
-.add('ruler.insideBBox', function () {
-    for (var i = 0; i < points.length; i++) {
-        ruler.insideBBox(points[i], bboxes[i]);
-    }
-})
-.on('cycle', function (event) {
-    console.log(String(event.target));
-})
-.run();
+});
