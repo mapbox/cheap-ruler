@@ -122,6 +122,20 @@ test('bufferPoint', function (t) {
     t.end();
 });
 
+test('bufferBBox', function (t) {
+    var bbox = [30, 38, 40, 39];
+    var bbox2 = ruler.bufferBBox(bbox, 1);
+    t.same(bbox2, [29.989308794440007, 37.991016879283826, 40.01069120555999, 39.008983120716174]);
+    t.end();
+});
+
+test('insideBBox', function (t) {
+    var bbox = [30, 38, 40, 39];
+    t.ok(ruler.insideBBox([35, 38.5], bbox), 'insideBBox inside');
+    t.notOk(ruler.insideBBox([45, 45], bbox), 'insideBBox outside');
+    t.end();
+});
+
 function turfPointBuffer(p, distance) {
     var dist = Math.sqrt(2) * distance;
     var pt = turf.point(p);
