@@ -4,8 +4,8 @@ A collection of fast approximations to common geographic measurements, along wit
 Useful for speeding up analysis scripts when measuring things on a city scale,
 replacing [Turf](http://turfjs.org/) calls in key places.
 
-For a city scale (a few dozen miles) and far away from poles,
-the results are typically within 0.1% of corresponding Turf functions.
+For distances under a hundred miles and not on the poles,
+the results are [typically within 0.1%](#precision) of corresponding Turf functions.
 
 ## Performance
 
@@ -57,7 +57,7 @@ var ruler = cheapRuler.fromTile(1567, 12);
 
 #### distance(a, b)
 
-Given two points of the form `[x, y]`, returns the distance.
+Given two points of the form `[longitude, latitude]`, returns the distance.
 
 ```js
 var distance = ruler.distance([30.5, 50.5], [30.51, 50.49]);
@@ -156,3 +156,27 @@ var inside = ruler.insideBBox([30.5, 50.5], [30, 50, 31, 51]);
 
 - NPM: `npm install cheap-ruler`
 - Browser build (CDN): https://npmcdn.com/cheap-ruler@1.3.0/cheap-ruler.js
+
+## Precision
+
+A table that shows the margin of error for `ruler.distance` compared to `turf.distance`:
+
+| lat | 0&deg; | 10&deg; | 20&deg; | 30&deg; | 40&deg; | 50&deg; | 60&deg; | 70&deg; | 80&deg; |
+| --- |  --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 0.1km | 0.08% | 0.08% | 0.08% | 0.08% | 0.08% | 0.08% | 0.08% | 0.08% | 0.08% |
+| 1km | 0.08% | 0.08% | 0.08% | 0.08% | 0.08% | 0.08% | 0.08% | 0.08% | 0.08% |
+| 10km | 0.08% | 0.08% | 0.08% | 0.08% | 0.08% | 0.08% | 0.08% | 0.08% | 0.08% |
+| 100km | 0.08% | 0.08% | 0.08% | 0.08% | 0.08% | 0.08% | 0.08% | 0.09% | 0.11% |
+| 1000km | 0.11% | 0.11% | 0.12% | 0.14% | 0.18% | 0.25% | 0.42% | 0.89% | 3.48% |
+
+The same table for a much more precise Vincenty distance formula (using `node-vincenty` module):
+
+| lat | 0&deg; | 10&deg; | 20&deg; | 30&deg; | 40&deg; | 50&deg; | 60&deg; | 70&deg; | 80&deg; |
+| --- |  --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 0.1km | 0.34% | 0.31% | 0.26% | 0.17% | 0.06% | 0.06% | 0.17% | 0.26% | 0.32% |
+| 1km | 0.34% | 0.32% | 0.26% | 0.17% | 0.06% | 0.06% | 0.17% | 0.26% | 0.31% |
+| 10km | 0.34% | 0.32% | 0.26% | 0.17% | 0.06% | 0.06% | 0.17% | 0.26% | 0.31% |
+| 100km | 0.34% | 0.32% | 0.26% | 0.17% | 0.06% | 0.06% | 0.16% | 0.25% | 0.28% |
+| 1000km | 0.36% | 0.34% | 0.3% | 0.23% | 0.16% | 0.11% | 0.17% | 0.55% | 3.08% |
+
+Errors for all other methods are similar.
