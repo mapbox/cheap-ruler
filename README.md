@@ -22,6 +22,7 @@ Compared to corresponding Turf methods (using Node v5.10):
 
 Additional utility methods:
 
+- `lineSliceAlong`: ~268x faster than `turf.lineSlice(turf.along(...`
 - `bufferPoint`: ~210x faster than creating a bounding box with two diagonal `turf.destination` calls
 - `bufferBBox`: ~210x faster (likewise)
 - `insideBBox`: ~24x faster than `turf.inside(turf.point(p), turf.bboxPolygon(bbox))`
@@ -125,7 +126,15 @@ var point = ruler.pointOnLine(line, [-67.04, 50.5]).point;
 Returns a part of the given line between the start and the stop points (or their closest points on the line).
 
 ```js
-ruler.pointOnLine([-67.04, 50.5], [-67.05, 50.56], line)
+ruler.lineSlice([-67.04, 50.5], [-67.05, 50.56], line);
+```
+
+#### lineSliceAlong(startDist, stopDist, line)
+
+Returns a part of the given line between the start and the stop points indicated by distance along the line.
+
+```js
+ruler.lineSliceAlong(10, 20, line);
 ```
 
 #### bufferPoint(p, buffer)

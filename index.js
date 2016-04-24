@@ -76,21 +76,10 @@ CheapRuler.prototype = {
 
         for (var i = 0; i < line.length - 1; i++) {
             var p0 = line[i];
-            var p = line[i + 1];
-            var d = this.distance(p0, p);
-
+            var p1 = line[i + 1];
+            var d = this.distance(p0, p1);
             sum += d;
-
-            if (sum > dist) {
-                var t = (dist - (sum - d)) / d;
-                var dx = p[0] - p0[0];
-                var dy = p[1] - p0[1];
-
-                return [
-                    p0[0] + dx * t,
-                    p0[1] + dy * t
-                ];
-            }
+            if (sum > dist) return interpolate(p0, p1, (dist - (sum - d)) / d);
         }
 
         return line[line.length - 1];
@@ -169,6 +158,32 @@ CheapRuler.prototype = {
         return slice;
     },
 
+    lineSliceAlong: function (start, stop, line) {
+        var sum = 0;
+        var slice = [];
+
+        for (var i = 0; i < line.length - 1; i++) {
+            var p0 = line[i];
+            var p1 = line[i + 1];
+            var d = this.distance(p0, p1);
+
+            sum += d;
+
+            if (sum > start && slice.length === 0) {
+                slice.push(interpolate(p0, p1, (start - (sum - d)) / d));
+            }
+
+            if (sum >= stop) {
+                slice.push(interpolate(p0, p1, (stop - (sum - d)) / d));
+                return slice;
+            }
+
+            if (sum > start) slice.push(p1);
+        }
+
+        return slice;
+    },
+
     bufferPoint: function (p, buffer) {
         var v = buffer / this.d;
         var h = v / this.e;
@@ -201,4 +216,13 @@ CheapRuler.prototype = {
 
 function equals(a, b) {
     return a[0] === b[0] && a[1] === b[1];
+}
+
+function interpolate(a, b, t) {
+    var dx = b[0] - a[0];
+    var dy = b[1] - a[1];
+    return [
+        a[0] + dx * t,
+        a[1] + dy * t
+    ];
 }

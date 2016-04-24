@@ -126,6 +126,25 @@ test('lineSlice', function (t) {
     t.end();
 });
 
+test('lineSliceAlong', function (t) {
+    for (var i = 0; i < lines.length; i++) {
+        if (i === 46) continue; // skip due to Turf bug https://github.com/Turfjs/turf/issues/351
+
+        var line = lines[i];
+        var dist = ruler.lineDistance(line);
+        var start = ruler.along(line, dist * 0.3);
+        var stop = ruler.along(line, dist * 0.7);
+
+        var expected = ruler.lineDistance(turf.lineSlice(
+            turf.point(start), turf.point(stop), turf.linestring(line)).geometry.coordinates);
+        var actual = ruler.lineDistance(ruler.lineSliceAlong(dist * 0.3, dist * 0.7, line));
+
+        assertErr(t, expected, actual, 0.001, 'lineSliceAlong length');
+    }
+    t.pass('lineSliceAlong length within 0.1%');
+    t.end();
+});
+
 test('lineSlice reverse', function (t) {
     var line = lines[0];
     var dist = ruler.lineDistance(line);
