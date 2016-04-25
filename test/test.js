@@ -26,9 +26,9 @@ test('distance', function (t) {
     for (var i = 0; i < points.length - 1; i++) {
         var expected = turf.distance(turf.point(points[i]), turf.point(points[i + 1]));
         var actual = ruler.distance(points[i], points[i + 1]);
-        assertErr(t, expected, actual, 0.001, 'distance');
+        assertErr(t, expected, actual, 0.003, 'distance');
     }
-    t.pass('distance within 0.1%');
+    t.pass('distance within 0.3%');
     t.end();
 });
 
@@ -36,9 +36,9 @@ test('bearing', function (t) {
     for (var i = 0; i < points.length - 1; i++) {
         var expected = turf.bearing(turf.point(points[i]), turf.point(points[i + 1]));
         var actual = ruler.bearing(points[i], points[i + 1]);
-        assertErr(t, expected, actual, 0.0001, 'bearing');
+        assertErr(t, expected, actual, 0.005, 'bearing');
     }
-    t.pass('bearing within 0.01%');
+    t.pass('bearing within 0.05%');
     t.end();
 });
 
@@ -47,10 +47,10 @@ test('destination', function (t) {
         var bearing = (i % 360) - 180;
         var expected = turf.destination(turf.point(points[i]), 1.0, bearing, 'kilometers').geometry.coordinates;
         var actual = ruler.destination(points[i], 1.0, bearing);
-        assertErr(t, expected[0], actual[0], 3e-7, 'destination longitude');
-        assertErr(t, expected[1], actual[1], 3e-7, 'destination latitude');
+        assertErr(t, expected[0], actual[0], 1e-6, 'destination longitude');
+        assertErr(t, expected[1], actual[1], 1e-6, 'destination latitude');
     }
-    t.pass('destination within 3e-7');
+    t.pass('destination within 1e-6');
     t.end();
 });
 
@@ -58,9 +58,9 @@ test('lineDistance', function (t) {
     for (var i = 0; i < lines.length; i++) {
         var expected = turf.lineDistance(turf.linestring(lines[i]));
         var actual = ruler.lineDistance(lines[i]);
-        assertErr(t, expected, actual, 0.001, 'lineDistance');
+        assertErr(t, expected, actual, 0.003, 'lineDistance');
     }
-    t.pass('lineDistance within 0.1%');
+    t.pass('lineDistance within 0.3%');
     t.end();
 });
 
@@ -70,9 +70,9 @@ test('area', function (t) {
         var poly = turf.polygon([lines[i].concat([lines[i][0]])]);
         var expected = turf.area(poly) / 1e6;
         var actual = ruler.area([lines[i]]);
-        assertErr(t, expected, actual, 0.0002, 'area');
+        assertErr(t, expected, actual, 0.003, 'area');
     }
-    t.pass('area within 0.02%');
+    t.pass('area within 0.3%');
     t.end();
 });
 
@@ -82,10 +82,10 @@ test('along', function (t) {
         var dist = turf.lineDistance(line) / 2;
         var expected = turf.along(line, dist, 'kilometers').geometry.coordinates;
         var actual = ruler.along(lines[i], dist);
-        assertErr(t, expected[0], actual[0], 2e-7, 'along longitude');
-        assertErr(t, expected[1], actual[1], 2e-7, 'along latitude');
+        assertErr(t, expected[0], actual[0], 1e-6, 'along longitude');
+        assertErr(t, expected[1], actual[1], 1e-6, 'along latitude');
     }
-    t.pass('lineDistance within 0.1%');
+    t.pass('along point within 1e-6');
     t.end();
 });
 
@@ -103,7 +103,7 @@ test('pointOnLine', function (t) {
     // not Turf comparison because pointOnLine is bugged https://github.com/Turfjs/turf/issues/344
     var line = [[-77.031669, 38.878605], [-77.029609, 38.881946]];
     var p = ruler.pointOnLine(line, [-77.034076, 38.882017]).point;
-    t.same(p, [-77.03051972665213, 38.88046894284234], 'pointOnLine');
+    t.same(p, [-77.03052697027461, 38.880457194811896], 'pointOnLine');
     t.end();
 });
 
@@ -118,11 +118,12 @@ test('lineSlice', function (t) {
 
         var expected = ruler.lineDistance(turf.lineSlice(
             turf.point(start), turf.point(stop), turf.linestring(line)).geometry.coordinates);
+
         var actual = ruler.lineDistance(ruler.lineSlice(start, stop, line));
 
-        assertErr(t, expected, actual, 0.001, 'lineSlice length');
+        assertErr(t, expected, actual, 0, 'lineSlice length');
     }
-    t.pass('lineSlice length within 0.1%');
+    t.pass('lineSlice length the same');
     t.end();
 });
 
@@ -139,9 +140,9 @@ test('lineSliceAlong', function (t) {
             turf.point(start), turf.point(stop), turf.linestring(line)).geometry.coordinates);
         var actual = ruler.lineDistance(ruler.lineSliceAlong(dist * 0.3, dist * 0.7, line));
 
-        assertErr(t, expected, actual, 0.001, 'lineSliceAlong length');
+        assertErr(t, expected, actual, 1e-10, 'lineSliceAlong length');
     }
-    t.pass('lineSliceAlong length within 0.1%');
+    t.pass('lineSliceAlong length within 1e-10');
     t.end();
 });
 
@@ -151,27 +152,27 @@ test('lineSlice reverse', function (t) {
     var start = ruler.along(line, dist * 0.7);
     var stop = ruler.along(line, dist * 0.3);
     var actual = ruler.lineDistance(ruler.lineSlice(start, stop, line));
-    t.equal(actual, 0.018665535420681036, 'lineSlice reversed length');
+    t.equal(actual, 0.018676802802910702, 'lineSlice reversed length');
     t.end();
 });
 
 test('bufferPoint', function (t) {
     for (var i = 0; i < points.length; i++) {
-        var expected = turfPointBuffer(points[i], 0.01);
-        var actual = milesRuler.bufferPoint(points[i], 0.01);
-        assertErr(t, expected[0], actual[0], 1e-8, 'bufferPoint west');
-        assertErr(t, expected[1], actual[1], 1e-8, 'bufferPoint east');
-        assertErr(t, expected[2], actual[2], 1e-8, 'bufferPoint south');
-        assertErr(t, expected[3], actual[3], 1e-8, 'bufferPoint north');
+        var expected = turfPointBuffer(points[i], 0.1);
+        var actual = milesRuler.bufferPoint(points[i], 0.1);
+        assertErr(t, expected[0], actual[0], 3e-5, 'bufferPoint west');
+        assertErr(t, expected[1], actual[1], 3e-5, 'bufferPoint east');
+        assertErr(t, expected[2], actual[2], 3e-5, 'bufferPoint south');
+        assertErr(t, expected[3], actual[3], 3e-5, 'bufferPoint north');
     }
-    t.pass('point buffer error within 1e-8');
+    t.pass('point buffer error within 3e-5');
     t.end();
 });
 
 test('bufferBBox', function (t) {
     var bbox = [30, 38, 40, 39];
     var bbox2 = ruler.bufferBBox(bbox, 1);
-    t.same(bbox2, [29.989308794440007, 37.991016879283826, 40.01069120555999, 39.008983120716174], 'bufferBBox');
+    t.same(bbox2, [29.989319515875376, 37.99098271225711, 40.01068048412462, 39.00901728774289], 'bufferBBox');
     t.end();
 });
 
