@@ -4,9 +4,11 @@ A collection of fast approximations to common geographic measurements, along wit
 Useful for speeding up analysis scripts when measuring things on a city scale,
 replacing [Turf](http://turfjs.org/) calls in key places.
 
-For distances under a few hundred miles and not on the poles,
-the results are typically within [0.1% margin of error](#precision)
-compared to precise formulas such as [Vincenti](https://en.wikipedia.org/wiki/Vincenty%27s_formulae).
+The approximations are based on an [FCC-approved formula of ellipsoidal Earth projection](https://www.gpo.gov/fdsys/pkg/CFR-2005-title47-vol4/pdf/CFR-2005-title47-vol4-sec73-208.pdf).
+For distances under 500 kilometers and not on the poles,
+the results are very precise — within [0.1% margin of error](#precision)
+compared to [Vincenti formulas](https://en.wikipedia.org/wiki/Vincenty%27s_formulae),
+and usually much less for shorter distances.
 
 ## Performance
 
