@@ -32,6 +32,15 @@ test('distance', function (t) {
     t.end();
 });
 
+test('distance in miles', function (t) {
+    var d = ruler.distance([30.5, 32.8351], [30.51, 32.8451]);
+    var d2 = milesRuler.distance([30.5, 32.8351], [30.51, 32.8451]);
+
+    assertErr(t, d / d2, 1.609344, 1e-12, 'distance in miles');
+    t.pass('distance in miles');
+    t.end();
+});
+
 test('bearing', function (t) {
     for (var i = 0; i < points.length - 1; i++) {
         var expected = turf.bearing(turf.point(points[i]), turf.point(points[i + 1]));
@@ -160,12 +169,12 @@ test('bufferPoint', function (t) {
     for (var i = 0; i < points.length; i++) {
         var expected = turfPointBuffer(points[i], 0.1);
         var actual = milesRuler.bufferPoint(points[i], 0.1);
-        assertErr(t, expected[0], actual[0], 3e-5, 'bufferPoint west');
-        assertErr(t, expected[1], actual[1], 3e-5, 'bufferPoint east');
-        assertErr(t, expected[2], actual[2], 3e-5, 'bufferPoint south');
-        assertErr(t, expected[3], actual[3], 3e-5, 'bufferPoint north');
+        assertErr(t, expected[0], actual[0], 2e-7, 'bufferPoint west');
+        assertErr(t, expected[1], actual[1], 2e-7, 'bufferPoint east');
+        assertErr(t, expected[2], actual[2], 2e-7, 'bufferPoint south');
+        assertErr(t, expected[3], actual[3], 2e-7, 'bufferPoint north');
     }
-    t.pass('point buffer error within 3e-5');
+    t.pass('point buffer error within 2e-7');
     t.end();
 });
 

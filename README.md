@@ -49,7 +49,7 @@ Don't create a new ruler for every calculation.
 #### cheapRuler(latitude[, units])
 
 Creates a ruler object that will approximate measurements around the given latitude.
-Units are either `kilometers` (default) or `miles`.
+Units are one of: `kilometers` (default), `miles`, `nauticalmiles`, `meters`, `yards`, `feet`, `inches`.
 
 #### cheapRuler.fromTile(y, z[, units])
 

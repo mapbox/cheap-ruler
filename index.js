@@ -6,6 +6,17 @@ function cheapRuler(lat /*: number */, units /*: ?string */) {
     return new CheapRuler(lat, units);
 }
 
+// unit multipliers for conversion from kilometers
+var factors = {
+    miles: 1000 / 1609.344,
+    nauticalmiles: 1000 / 1852,
+    meters: 1000,
+    metres: 1000,
+    yards: 1000 / 0.9144,
+    feet: 1000 / 0.3048,
+    inches: 1000 / 0.0254
+};
+
 cheapRuler.fromTile = function (y, z, units) {
     var n = Math.PI * (1 - 2 * (y + 0.5) / Math.pow(2, z));
     var lat = Math.atan(0.5 * (Math.exp(n) - Math.exp(-n))) * 180 / Math.PI;
@@ -16,10 +27,7 @@ function CheapRuler(lat, units) {
     if (lat === undefined) throw new Error('No latitude given.');
 
     var f = lat * Math.PI / 180;
-
-    // multiplier for unit conversion
-    var m = units === 'miles' ?  1.609344 :
-            units === 'meters' ? 1000 : 1;
+    var m = units ? factors[units] : 1;
 
     // longitude correction
     this.kx = m * (111.41513 * Math.cos(f) - 0.09455 * Math.cos(3 * f) + 0.00012 * Math.cos(5 * f));
