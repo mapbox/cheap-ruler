@@ -1,8 +1,7 @@
-# cheap-ruler [![Build Status](https://travis-ci.org/mapbox/cheap-ruler.svg?branch=master)](https://travis-ci.org/mapbox/cheap-ruler)
+# cheap-ruler [![Build Status](https://travis-ci.org/mapbox/cheap-ruler.svg?branch=master)](https://travis-ci.org/mapbox/cheap-ruler) [![](https://img.shields.io/badge/simply-awesome-brightgreen.svg)](https://github.com/mourner/projects)
 
-A collection of fast approximations to common geographic measurements, along with some utility functions.
-Useful for speeding up analysis scripts when measuring things on a city scale,
-replacing [Turf](http://turfjs.org/) calls in key places.
+A collection of very fast approximations to common geodesic measurements.
+Useful for performance-sensitive code that measures things on a city scale.
 
 The approximations are based on an [FCC-approved formula of ellipsoidal Earth projection](https://www.gpo.gov/fdsys/pkg/CFR-2005-title47-vol4/pdf/CFR-2005-title47-vol4-sec73-208.pdf).
 For distances under 500 kilometers and not on the poles,
@@ -12,7 +11,7 @@ and usually much less for shorter distances.
 
 ## Performance
 
-Compared to corresponding Turf methods (using Node v5.10):
+Compared to corresponding [Turf](http://turfjs.org/) methods (using Node v5.10):
 
 - `distance`: ~26x faster
 - `bearing`: ~3.5x faster
@@ -34,13 +33,16 @@ Additional utility methods:
 
 ```js
 var ruler = cheapRuler(35.05, 'miles');
-
+// ...
 var distance = ruler.distance([30.51, 50.32], [30.52, 50.312]);
 var lineLength = ruler.lineDistance(line.geometry.coordinates);
 var bbox = ruler.bufferPoint([30.5, 50.5], 0.01);
 ```
 
-**Note**: to get the full performance benefit, create the ruler object once per an area of calculation (such as a tile), and then reuse it as much as possible.
+**Note**: to get the full performance benefit,
+create a ruler object only once per a general area of calculation,
+and then reuse it as much as possible.
+Don't create a new ruler for every calculation.
 
 ### Creating a ruler object
 
