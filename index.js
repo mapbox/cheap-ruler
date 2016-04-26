@@ -1,8 +1,8 @@
-'use strict';
+'use strict'; /* @flow */
 
 module.exports = cheapRuler;
 
-function cheapRuler(lat, units) {
+function cheapRuler(lat /*: number */, units /*: ?string */) {
     return new CheapRuler(lat, units);
 }
 
