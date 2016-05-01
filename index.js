@@ -8,6 +8,7 @@ function cheapRuler(lat /*: number */, units /*: ?string */) {
 
 // unit multipliers for conversion from kilometers
 var factors = {
+    kilometers: 1,
     miles: 1000 / 1609.344,
     nauticalmiles: 1000 / 1852,
     meters: 1000,
@@ -25,6 +26,7 @@ cheapRuler.fromTile = function (y, z, units) {
 
 function CheapRuler(lat, units) {
     if (lat === undefined) throw new Error('No latitude given.');
+    if (units && !factors[units]) throw new Error('Unknown unit ' + units + '. Use one of: ' + Object.keys(factors));
 
     var f = lat * Math.PI / 180;
     var m = units ? factors[units] : 1;
