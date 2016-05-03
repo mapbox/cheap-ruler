@@ -28,20 +28,16 @@ function CheapRuler(lat, units) {
     if (lat === undefined) throw new Error('No latitude given.');
     if (units && !factors[units]) throw new Error('Unknown unit ' + units + '. Use one of: ' + Object.keys(factors));
 
-    var f = lat * Math.PI / 180;
     var m = units ? factors[units] : 1;
 
-    var cos = Math.cos(f);
+    var cos = Math.cos(lat * Math.PI / 180);
     var cos2 = 2 * cos * cos - 1;
     var cos3 = 2 * cos * cos2 - cos;
     var cos4 = 2 * cos * cos3 - cos2;
     var cos5 = 2 * cos * cos4 - cos3;
 
-    // longitude correction
-    this.kx = m * (111.41513 * cos - 0.09455 * cos3 + 0.00012 * cos5);
-
-    // latitude correction
-    this.ky = m * (111.13209 - 0.56605 * cos2 + 0.0012 * cos4);
+    this.kx = m * (111.41513 * cos - 0.09455 * cos3 + 0.00012 * cos5); // longitude correction
+    this.ky = m * (111.13209 - 0.56605 * cos2 + 0.0012 * cos4);        // latitude correction
 }
 
 CheapRuler.prototype = {
