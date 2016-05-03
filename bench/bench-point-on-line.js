@@ -6,7 +6,6 @@ var cheapRuler = require('../');
 var turf = require('turf');
 var lines = require('../test/fixtures/lines.json');
 
-var ruler = cheapRuler(32.8351);
 var p = [-96.9159, 32.8351];
 
 runBench({
@@ -16,6 +15,7 @@ runBench({
         }
     },
     'ruler.pointOnLine': function () {
+        var ruler = cheapRuler(32.8351);
         for (var i = 0; i < lines.length; i++) {
             ruler.pointOnLine(lines[i], p);
         }

@@ -6,8 +6,6 @@ var cheapRuler = require('../');
 var turf = require('turf');
 var lines = require('../test/fixtures/lines.json');
 
-var ruler = cheapRuler(32.8351);
-
 var polygons = [];
 
 for (var i = 0; i < lines.length; i++) {
@@ -23,6 +21,7 @@ runBench({
         }
     },
     'ruler.area': function () {
+        var ruler = cheapRuler(32.8351);
         for (var i = 0; i < polygons.length; i++) {
             ruler.area(polygons[i]);
         }

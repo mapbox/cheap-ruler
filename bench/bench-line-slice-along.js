@@ -23,6 +23,7 @@ runBench({
         }
     },
     'ruler.lineSliceAlong': function () {
+        var ruler = cheapRuler(32.8351);
         for (var i = 0; i < lines.length; i++) {
             ruler.lineSliceAlong(distances[i] * 0.3, distances[i] * 0.7, lines[i]);
         }

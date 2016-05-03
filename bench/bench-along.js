@@ -19,6 +19,7 @@ runBench({
         }
     },
     'ruler.along': function () {
+        var ruler = cheapRuler(32.8351);
         for (var i = 0; i < lines.length; i++) {
             ruler.along(lines[i], distances[i]);
         }

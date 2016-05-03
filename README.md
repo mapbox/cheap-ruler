@@ -11,23 +11,23 @@ and usually much less for shorter distances.
 
 ## Performance
 
-Compared to corresponding [Turf](http://turfjs.org/) methods (using Node v5.10):
+Compared to corresponding [Turf](http://turfjs.org/) methods (using Node v6):
 
-- `distance`: ~26x faster
-- `bearing`: ~3.5x faster
-- `destination`: ~6.4x faster
-- `lineDistance`: ~26x faster
-- `area`: ~3.6x faster
-- `along`: ~21x faster
-- `pointOnLine`: ~72x faster
-- `lineSlice`: ~56x faster
+- `distance`: ~31x faster
+- `bearing`: ~3.6x faster
+- `destination`: ~7.2x faster
+- `lineDistance`: ~31x faster
+- `area`: ~3.4x faster
+- `along`: ~31x faster
+- `pointOnLine`: ~78x faster
+- `lineSlice`: ~60x faster
 
 Additional utility methods:
 
-- `lineSliceAlong`: ~268x faster than `turf.lineSlice(turf.along(...`
-- `bufferPoint`: ~210x faster than creating a bounding box with two diagonal `turf.destination` calls
-- `bufferBBox`: ~210x faster (likewise)
-- `insideBBox`: ~24x faster than `turf.inside(turf.point(p), turf.bboxPolygon(bbox))`
+- `lineSliceAlong`: ~285x faster than `turf.lineSlice(turf.along(...`
+- `bufferPoint`: ~260x faster than creating a bounding box with two diagonal `turf.destination` calls
+- `bufferBBox`: ~260x faster (likewise)
+- `insideBBox`: ~19x faster than `turf.inside(turf.point(p), turf.bboxPolygon(bbox))`
 
 ## Usage
 

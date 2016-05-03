@@ -26,6 +26,7 @@ runBench({
         }
     },
     'ruler.lineSlice': function () {
+        var ruler = cheapRuler(32.8351);
         for (var i = 0; i < lines.length; i++) {
             ruler.lineSlice(endpoints[i].start, endpoints[i].stop, lines[i]);
         }

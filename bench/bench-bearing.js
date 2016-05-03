@@ -7,8 +7,6 @@ var turf = require('turf');
 var lines = require('../test/fixtures/lines.json');
 var points = Array.prototype.concat.apply([], lines);
 
-var ruler = cheapRuler(32.8351);
-
 runBench({
     'turf.bearing': function () {
         for (var i = 0; i < points.length - 1; i++) {
@@ -16,6 +14,7 @@ runBench({
         }
     },
     'ruler.bearing': function () {
+        var ruler = cheapRuler(32.8351);
         for (var i = 0; i < points.length - 1; i++) {
             ruler.bearing(points[i], points[i + 1]);
         }

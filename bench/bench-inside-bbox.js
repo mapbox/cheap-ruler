@@ -20,6 +20,7 @@ runBench({
         }
     },
     'ruler.insideBBox': function () {
+        var ruler = cheapRuler(32.8351);
         for (var i = 0; i < points.length; i++) {
             ruler.insideBBox(points[i], bboxes[i]);
         }

@@ -7,8 +7,6 @@ var turf = require('turf');
 var lines = require('../test/fixtures/lines.json');
 var points = Array.prototype.concat.apply([], lines);
 
-var ruler = cheapRuler(32.8351);
-
 runBench({
     'turf.destination': function () {
         for (var i = 0; i < points.length; i++) {
@@ -16,6 +14,7 @@ runBench({
         }
     },
     'ruler.destination': function () {
+        var ruler = cheapRuler(32.8351);
         for (var i = 0; i < points.length; i++) {
             ruler.destination(points[i], 1, (i % 360) - 180);
         }
