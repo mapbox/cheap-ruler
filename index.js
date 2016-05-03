@@ -7,7 +7,7 @@ function cheapRuler(lat /*: number */, units /*: ?string */) {
 }
 
 // unit multipliers for conversion from kilometers
-var factors = {
+var factors = cheapRuler.units = {
     kilometers: 1,
     miles: 1000 / 1609.344,
     nauticalmiles: 1000 / 1852,
