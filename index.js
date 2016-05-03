@@ -31,11 +31,17 @@ function CheapRuler(lat, units) {
     var f = lat * Math.PI / 180;
     var m = units ? factors[units] : 1;
 
+    var cos = Math.cos(f);
+    var cos2 = 2 * cos * cos - 1;
+    var cos3 = 2 * cos * cos2 - cos;
+    var cos4 = 2 * cos * cos3 - cos2;
+    var cos5 = 2 * cos * cos4 - cos3;
+
     // longitude correction
-    this.kx = m * (111.41513 * Math.cos(f) - 0.09455 * Math.cos(3 * f) + 0.00012 * Math.cos(5 * f));
+    this.kx = m * (111.41513 * cos - 0.09455 * cos3 + 0.00012 * cos5);
 
     // latitude correction
-    this.ky = m * (111.13209 - 0.56605 * Math.cos(2 * f) + 0.0012 * Math.cos(4 * f));
+    this.ky = m * (111.13209 - 0.56605 * cos2 + 0.0012 * cos4);
 }
 
 CheapRuler.prototype = {
