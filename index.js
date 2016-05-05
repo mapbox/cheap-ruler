@@ -36,8 +36,9 @@ function CheapRuler(lat, units) {
     var cos4 = 2 * cos * cos3 - cos2;
     var cos5 = 2 * cos * cos4 - cos3;
 
-    this.kx = m * (111.41513 * cos - 0.09455 * cos3 + 0.00012 * cos5); // longitude correction
-    this.ky = m * (111.13209 - 0.56605 * cos2 + 0.0012 * cos4);        // latitude correction
+    // kilometers per longitude and latitude degree, respectively (http://1.usa.gov/1Wb1bv7)
+    this.kx = m * (111.41513 * cos - 0.09455 * cos3 + 0.00012 * cos5);
+    this.ky = m * (111.13209 - 0.56605 * cos2 + 0.0012 * cos4);
 }
 
 CheapRuler.prototype = {
