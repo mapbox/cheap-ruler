@@ -10,11 +10,12 @@
     "eslint": "^2.7.0",
     "eslint-config-mourner": "^2.0.1",
     "istanbul": "^0.4.3",
+    "node-vincenty": "0.0.6",
     "tape": "^4.5.1",
     "turf": "^2.0.2"
   },
   "scripts": {
-    "pretest": "eslint index.js bench test/test.js",
+    "pretest": "eslint index.js bench test/*.js",
     "test": "tape test/test.js",
     "build": "browserify index.js -s cheapRuler > cheap-ruler.js",
     "prepublish": "npm run build",
