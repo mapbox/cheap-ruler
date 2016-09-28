@@ -5,10 +5,9 @@ module.exports = cheapRuler;
 /**
  * A collection of very fast approximations to common geodesic measurements. Useful for performance-sensitive code that measures things on a city scale.
  *
- * @name cheapRuler
  * @param {number} lat latitude
  * @param {string} [units='kilometers']
- * @returns {Object} CheapRuler
+ * @returns {CheapRuler}
  * @example
  * var ruler = cheapRuler(35.05, 'miles');
  * //=ruler
@@ -20,7 +19,6 @@ function cheapRuler(lat /*: number */, units /*: ?string */) {
 /**
  * Multipliers for converting between units.
  *
- * @name units
  * @example
  * // convert 50 meters to yards
  * 50 * cheapRuler.units.yards / cheapRuler.units.meters;
@@ -39,11 +37,10 @@ var factors = cheapRuler.units = {
 /**
  * Creates a ruler object from tile coordinates (y and z). Convenient in tile-reduce scripts.
  *
- * @name fromTile
  * @param {number} y
  * @param {number} z
  * @param {string} [units='kilometers']
- * @returns {Object} CheapRuler
+ * @returns {CheapRuler}
  * @example
  * var ruler = cheapRuler.fromTile(1567, 12);
  * //=ruler
@@ -75,7 +72,6 @@ CheapRuler.prototype = {
     /**
      * Given two points of the form [longitude, latitude], returns the distance.
      *
-     * @name distance
      * @param {Array<number>} a point [longitude, latitude]
      * @param {Array<number>} b point [longitude, latitude]
      * @returns {number} distance
@@ -92,7 +88,6 @@ CheapRuler.prototype = {
     /**
      * Returns the bearing between two points in angles.
      *
-     * @name bearing
      * @param {Array<number>} a point [longitude, latitude]
      * @param {Array<number>} b point [longitude, latitude]
      * @returns {number} bearing
@@ -112,7 +107,6 @@ CheapRuler.prototype = {
     /**
      * Returns a new point given distance and bearing from the starting point.
      *
-     * @name destination
      * @param {Array<number>} p point [longitude, latitude]
      * @param {number} dist distance
      * @param {number} bearing
@@ -132,7 +126,6 @@ CheapRuler.prototype = {
     /**
      * Given a line (an array of points), returns the total line distance.
      *
-     * @name lineDistance
      * @param {Array<Array<number>>} points [longitude, latitude]
      * @returns {number} total line distance
      * @example
@@ -153,7 +146,6 @@ CheapRuler.prototype = {
     /**
      * Given a polygon (an array of rings, where each ring is an array of points), returns the area.
      *
-     * @name area
      * @param {Array<Array<Array<number>>>} polygon
      * @returns {number} area value in the specified units (square kilometers by default)
      * @example
@@ -180,7 +172,6 @@ CheapRuler.prototype = {
     /**
      * Returns the point at a specified distance along the line.
      *
-     * @name along
      * @param {Array<Array<number>>} line
      * @param {number} dist distance
      * @returns {Array<number>} point [longitude, latitude]
@@ -263,7 +254,6 @@ CheapRuler.prototype = {
     /**
      * Returns a part of the given line between the start and the stop points (or their closest points on the line).
      *
-     * @name lineSlice
      * @param {Array<number>} start point [longitude, latitude]
      * @param {Array<number>} stop point [longitude, latitude]
      * @param {Array<Array<number>>} line
@@ -303,7 +293,6 @@ CheapRuler.prototype = {
     /**
      * Returns a part of the given line between the start and the stop points indicated by distance along the line.
      *
-     * @name lineSliceAlong
      * @param {number} start distance
      * @param {number} stop distance
      * @param {Array<Array<number>>} line
@@ -341,7 +330,6 @@ CheapRuler.prototype = {
     /**
      * Given a point, returns a bounding box object ([w, s, e, n]) created from the given point buffered by a given distance.
      *
-     * @name bufferPoint
      * @param {Array<number>} p point [longitude, latitude]
      * @param {number} buffer
      * @returns {Array<number>} box object ([w, s, e, n])
@@ -363,7 +351,6 @@ CheapRuler.prototype = {
     /**
      * Given a bounding box, returns the box buffered by a given distance.
      *
-     * @name bufferBBox
      * @param {Array<number>} box object ([w, s, e, n])
      * @param {number} buffer
      * @returns {Array<number>} box object ([w, s, e, n])
@@ -385,7 +372,6 @@ CheapRuler.prototype = {
     /**
      * Returns true if the given point is inside in the given bounding box, otherwise false.
      *
-     * @name insideBBox
      * @param {Array<number>} p point [longitude, latitude]
      * @param {Array<number>} box object ([w, s, e, n])
      * @returns {boolean}
