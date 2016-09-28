@@ -2,11 +2,29 @@
 
 module.exports = cheapRuler;
 
+/**
+ * A collection of very fast approximations to common geodesic measurements. Useful for performance-sensitive code that measures things on a city scale.
+ *
+ * @name cheapRuler
+ * @param {number} lat latitude
+ * @param {string} [units='kilometers']
+ * @returns {Object} CheapRuler
+ * @example
+ * var ruler = cheapRuler(35.05, 'miles');
+ * //=ruler
+ */
 function cheapRuler(lat /*: number */, units /*: ?string */) {
     return new CheapRuler(lat, units);
 }
 
-// unit multipliers for conversion from kilometers
+/**
+ * Multipliers for converting between units.
+ *
+ * @name units
+ * @example
+ * // convert 50 meters to yards
+ * 50 * cheapRuler.units.yards / cheapRuler.units.meters;
+ */
 var factors = cheapRuler.units = {
     kilometers: 1,
     miles: 1000 / 1609.344,
@@ -18,6 +36,18 @@ var factors = cheapRuler.units = {
     inches: 1000 / 0.0254
 };
 
+/**
+ * Creates a ruler object from tile coordinates (y and z). Convenient in tile-reduce scripts.
+ *
+ * @name fromTile
+ * @param {number} y
+ * @param {number} z
+ * @param {string} [units='kilometers']
+ * @returns {Object} CheapRuler
+ * @example
+ * var ruler = cheapRuler.fromTile(1567, 12);
+ * //=ruler
+ */
 cheapRuler.fromTile = function (y, z, units) {
     var n = Math.PI * (1 - 2 * (y + 0.5) / Math.pow(2, z));
     var lat = Math.atan(0.5 * (Math.exp(n) - Math.exp(-n))) * 180 / Math.PI;
@@ -42,12 +72,34 @@ function CheapRuler(lat, units) {
 }
 
 CheapRuler.prototype = {
+    /**
+     * Given two points of the form [longitude, latitude], returns the distance.
+     *
+     * @name distance
+     * @param {Array<number>} a point [longitude, latitude]
+     * @param {Array<number>} b point [longitude, latitude]
+     * @returns {number} distance
+     * @example
+     * var distance = ruler.distance([30.5, 50.5], [30.51, 50.49]);
+     * //=distance
+     */
     distance: function (a, b) {
         var dx = (a[0] - b[0]) * this.kx;
         var dy = (a[1] - b[1]) * this.ky;
         return Math.sqrt(dx * dx + dy * dy);
     },
 
+    /**
+     * Returns the bearing between two points in angles.
+     *
+     * @name bearing
+     * @param {Array<number>} a point [longitude, latitude]
+     * @param {Array<number>} b point [longitude, latitude]
+     * @returns {number} bearing
+     * @example
+     * var bearing = ruler.bearing([30.5, 50.5], [30.51, 50.49]);
+     * //=bearing
+     */
     bearing: function (a, b) {
         var dx = (b[0] - a[0]) * this.kx;
         var dy = (b[1] - a[1]) * this.ky;
@@ -57,6 +109,18 @@ CheapRuler.prototype = {
         return bearing;
     },
 
+    /**
+     * Returns a new point given distance and bearing from the starting point.
+     *
+     * @name destination
+     * @param {Array<number>} p point [longitude, latitude]
+     * @param {number} dist distance
+     * @param {number} bearing
+     * @returns {Array<number>} point [longitude, latitude]
+     * @example
+     * var point = ruler.destination([30.5, 50.5], 0.1, 90);
+     * //=point
+     */
     destination: function (p, dist, bearing) {
         var a = (90 - bearing) * Math.PI / 180;
         return [
@@ -65,6 +129,19 @@ CheapRuler.prototype = {
         ];
     },
 
+    /**
+     * Given a line (an array of points), returns the total line distance.
+     *
+     * @name lineDistance
+     * @param {Array<Array<number>>} points [longitude, latitude]
+     * @returns {number} total line distance
+     * @example
+     * var length = ruler.lineDistance([
+     *     [-67.031, 50.458], [-67.031, 50.534],
+     *     [-66.929, 50.534], [-66.929, 50.458]
+     * ]);
+     * //=length
+     */
     lineDistance: function (points) {
         var total = 0;
         for (var i = 0; i < points.length - 1; i++) {
@@ -73,6 +150,19 @@ CheapRuler.prototype = {
         return total;
     },
 
+    /**
+     * Given a polygon (an array of rings, where each ring is an array of points), returns the area.
+     *
+     * @name area
+     * @param {Array<Array<Array<number>>>} polygon
+     * @returns {number} area value in the specified units (square kilometers by default)
+     * @example
+     * var area = ruler.area([[
+     *     [-67.031, 50.458], [-67.031, 50.534], [-66.929, 50.534],
+     *     [-66.929, 50.458], [-67.031, 50.458]
+     * ]]);
+     * //=area
+     */
     area: function (polygon) {
         var sum = 0;
 
@@ -87,6 +177,17 @@ CheapRuler.prototype = {
         return (Math.abs(sum) / 2) * this.kx * this.ky;
     },
 
+    /**
+     * Returns the point at a specified distance along the line.
+     *
+     * @name along
+     * @param {Array<Array<number>>} line
+     * @param {number} dist distance
+     * @returns {Array<number>} point [longitude, latitude]
+     * @example
+     * var point = ruler.along(line, 2.5);
+     * //=point
+     */
     along: function (line, dist) {
         var sum = 0;
 
@@ -103,6 +204,17 @@ CheapRuler.prototype = {
         return line[line.length - 1];
     },
 
+    /**
+     * Returns an object of the form {point, index} where point is closest point on the line from the given point, and index is the start index of the segment with the closest point.
+     *
+     * @pointOnLine
+     * @param {Array<Array<number>>} line
+     * @param {Array<number>} p point [longitude, latitude]
+     * @returns {Object} {point, index}
+     * @example
+     * var point = ruler.pointOnLine(line, [-67.04, 50.5]).point;
+     * //=point
+     */
     pointOnLine: function (line, p) {
         var minDist = Infinity;
         var minX, minY, minI, minT;
@@ -148,6 +260,18 @@ CheapRuler.prototype = {
         };
     },
 
+    /**
+     * Returns a part of the given line between the start and the stop points (or their closest points on the line).
+     *
+     * @name lineSlice
+     * @param {Array<number>} start point [longitude, latitude]
+     * @param {Array<number>} stop point [longitude, latitude]
+     * @param {Array<Array<number>>} line
+     * @returns {Array<Array<number>>} line part of a line
+     * @example
+     * var line2 = ruler.lineSlice([-67.04, 50.5], [-67.05, 50.56], line1);
+     * //=line2
+     */
     lineSlice: function (start, stop, line) {
         var p1 = this.pointOnLine(line, start);
         var p2 = this.pointOnLine(line, stop);
@@ -176,6 +300,18 @@ CheapRuler.prototype = {
         return slice;
     },
 
+    /**
+     * Returns a part of the given line between the start and the stop points indicated by distance along the line.
+     *
+     * @name lineSliceAlong
+     * @param {number} start distance
+     * @param {number} stop distance
+     * @param {Array<Array<number>>} line
+     * @returns {Array<Array<number>>} line part of a line
+     * @example
+     * var line2 = ruler.lineSliceAlong(10, 20, line1);
+     * //=line2
+     */
     lineSliceAlong: function (start, stop, line) {
         var sum = 0;
         var slice = [];
@@ -202,6 +338,17 @@ CheapRuler.prototype = {
         return slice;
     },
 
+    /**
+     * Given a point, returns a bounding box object ([w, s, e, n]) created from the given point buffered by a given distance.
+     *
+     * @name bufferPoint
+     * @param {Array<number>} p point [longitude, latitude]
+     * @param {number} buffer
+     * @returns {Array<number>} box object ([w, s, e, n])
+     * @example
+     * var bbox = ruler.bufferPoint([30.5, 50.5], 0.01);
+     * //=bbox
+     */
     bufferPoint: function (p, buffer) {
         var v = buffer / this.ky;
         var h = buffer / this.kx;
@@ -213,6 +360,17 @@ CheapRuler.prototype = {
         ];
     },
 
+    /**
+     * Given a bounding box, returns the box buffered by a given distance.
+     *
+     * @name bufferBBox
+     * @param {Array<number>} box object ([w, s, e, n])
+     * @param {number} buffer
+     * @returns {Array<number>} box object ([w, s, e, n])
+     * @example
+     * var bbox = ruler.bufferBBox([30.5, 50.5, 31, 51], 0.2);
+     * //=bbox
+     */
     bufferBBox: function (bbox, buffer) {
         var v = buffer / this.ky;
         var h = buffer / this.kx;
@@ -224,6 +382,17 @@ CheapRuler.prototype = {
         ];
     },
 
+    /**
+     * Returns true if the given point is inside in the given bounding box, otherwise false.
+     *
+     * @name insideBBox
+     * @param {Array<number>} p point [longitude, latitude]
+     * @param {Array<number>} box object ([w, s, e, n])
+     * @returns {boolean}
+     * @example
+     * var inside = ruler.insideBBox([30.5, 50.5], [30, 50, 31, 51]);
+     * //=inside
+     */
     insideBBox: function (p, bbox) {
         return p[0] >= bbox[0] &&
                p[0] <= bbox[2] &&
