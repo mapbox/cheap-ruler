@@ -1,5 +1,5 @@
 {
-  "name": "cheap-ruler",
+  "name": "@mapbox/cheap-ruler",
   "version": "2.4.1",
   "description": "A collection of fast approximations to common geographic measurements.",
   "main": "index.js",
