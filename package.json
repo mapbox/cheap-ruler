@@ -3,6 +3,7 @@
   "version": "2.4.1",
   "description": "A collection of fast approximations to common geographic measurements.",
   "main": "index.js",
+  "types": "index.d.ts",
   "dependencies": {},
   "devDependencies": {
     "benchmark": "^2.1.0",
@@ -12,11 +13,13 @@
     "istanbul": "^0.4.3",
     "node-vincenty": "0.0.6",
     "tape": "^4.5.1",
-    "turf": "^2.0.2"
+    "turf": "^2.0.2",
+    "typescript": "^2.1.4"
   },
   "scripts": {
-    "pretest": "eslint index.js bench test/*.js",
+    "pretest": "eslint index.js bench test/*.js && npm run types",
     "test": "tape test/test.js",
+    "types": "tsc test/types.ts",
     "build": "browserify index.js -s cheapRuler > cheap-ruler.js",
     "prepublish": "npm run build",
     "cov": "istanbul cover tape test/test.js"
