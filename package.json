@@ -17,8 +17,9 @@
     "typescript": "^2.1.4"
   },
   "scripts": {
-    "pretest": "eslint index.js bench test/*.js",
+    "pretest": "eslint index.js bench test/*.js && npm run types",
     "test": "tape test/test.js",
+    "types": "tsc test/types.ts",
     "build": "browserify index.js -s cheapRuler > cheap-ruler.js",
     "prepublish": "npm run build",
     "cov": "istanbul cover tape test/test.js"
