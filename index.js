@@ -117,9 +117,26 @@ CheapRuler.prototype = {
      */
     destination: function (p, dist, bearing) {
         var a = (90 - bearing) * Math.PI / 180;
+        return this.offset(p,
+            Math.cos(a) * dist,
+            Math.sin(a) * dist);
+    },
+
+    /**
+     * Returns a new point given easting and northing offsets (in ruler units) from the starting point.
+     *
+     * @param {Array<number>} p point [longitude, latitude]
+     * @param {number} dx easting
+     * @param {number} dy northing
+     * @returns {Array<number>} point [longitude, latitude]
+     * @example
+     * var point = ruler.offset([30.5, 50.5], 10, 10);
+     * //=point
+     */
+    offset: function (p, dx, dy) {
         return [
-            p[0] + Math.cos(a) * dist / this.kx,
-            p[1] + Math.sin(a) * dist / this.ky
+            p[0] + dx / this.kx,
+            p[1] + dy / this.ky
         ];
     },
 
