@@ -20,7 +20,7 @@ runBench({
     },
     'new ruler for every point': function () {
         for (var i = 0; i < lines.length; i++) {
-            var sum = 0;
+            var sum = 0; // eslint-disable-line
             for (var j = 0; j < lines[i].length - 1; j++) {
                 var p1 = lines[i][j];
                 var p2 = lines[i][j + 1];

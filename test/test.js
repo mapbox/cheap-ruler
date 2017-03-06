@@ -2,7 +2,7 @@
 
 var test = require('tape').test;
 var createRuler = require('../');
-var turf = require('turf');
+var turf = require('@turf/turf');
 var lines = require('./fixtures/lines.json');
 var points = Array.prototype.concat.apply([], lines);
 
@@ -65,7 +65,7 @@ test('destination', function (t) {
 
 test('lineDistance', function (t) {
     for (var i = 0; i < lines.length; i++) {
-        var expected = turf.lineDistance(turf.linestring(lines[i]));
+        var expected = turf.lineDistance(turf.lineString(lines[i]));
         var actual = ruler.lineDistance(lines[i]);
         assertErr(t, expected, actual, 0.003, 'lineDistance');
     }
@@ -87,7 +87,7 @@ test('area', function (t) {
 
 test('along', function (t) {
     for (var i = 0; i < lines.length; i++) {
-        var line = turf.linestring(lines[i]);
+        var line = turf.lineString(lines[i]);
         var dist = turf.lineDistance(line) / 2;
         var expected = turf.along(line, dist, 'kilometers').geometry.coordinates;
         var actual = ruler.along(lines[i], dist);
@@ -118,21 +118,19 @@ test('pointOnLine', function (t) {
 
 test('lineSlice', function (t) {
     for (var i = 0; i < lines.length; i++) {
-        if (i === 46) continue; // skip due to Turf bug https://github.com/Turfjs/turf/issues/351
-
         var line = lines[i];
         var dist = ruler.lineDistance(line);
         var start = ruler.along(line, dist * 0.3);
         var stop = ruler.along(line, dist * 0.7);
 
         var expected = ruler.lineDistance(turf.lineSlice(
-            turf.point(start), turf.point(stop), turf.linestring(line)).geometry.coordinates);
+            turf.point(start), turf.point(stop), turf.lineString(line)).geometry.coordinates);
 
         var actual = ruler.lineDistance(ruler.lineSlice(start, stop, line));
 
-        assertErr(t, expected, actual, 0, 'lineSlice length');
+        assertErr(t, expected, actual, 1e-5, 'lineSlice length');
     }
-    t.pass('lineSlice length the same');
+    t.pass('lineSlice length within 1e-5');
     t.end();
 });
 
@@ -146,12 +144,12 @@ test('lineSliceAlong', function (t) {
         var stop = ruler.along(line, dist * 0.7);
 
         var expected = ruler.lineDistance(turf.lineSlice(
-            turf.point(start), turf.point(stop), turf.linestring(line)).geometry.coordinates);
+            turf.point(start), turf.point(stop), turf.lineString(line)).geometry.coordinates);
         var actual = ruler.lineDistance(ruler.lineSliceAlong(dist * 0.3, dist * 0.7, line));
 
-        assertErr(t, expected, actual, 1e-10, 'lineSliceAlong length');
+        assertErr(t, expected, actual, 1e-5, 'lineSliceAlong length');
     }
-    t.pass('lineSliceAlong length within 1e-10');
+    t.pass('lineSliceAlong length within 1e-5');
     t.end();
 });
 
