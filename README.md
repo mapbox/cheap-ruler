@@ -85,6 +85,14 @@ Returns a new point given distance and bearing from the starting point.
 var point = ruler.destination([30.5, 50.5], 0.1, 90);
 ```
 
+#### offset(p, dx, dy)
+
+Returns a new point given easting and northing offsets from the starting point.
+
+```js
+var point = ruler.offset([30.5, 50.5], 10, 5); // 10km east and 5km north
+```
+
 #### lineDistance(line)
 
 Given a line (an array of points), returns the total line distance.
@@ -190,7 +198,7 @@ var box = ruler.bufferPoint(p, 200 / cheapRuler.units.inches);
 ## Install
 
 - NPM: `npm install cheap-ruler`
-- Browser build (CDN): https://unpkg.com/cheap-ruler@2.4.1/cheap-ruler.js
+- Browser build (CDN): https://unpkg.com/cheap-ruler@2.5.0/cheap-ruler.js
 
 ## Precision
 
