@@ -19,6 +19,7 @@ declare namespace cheapRuler {
         bufferPoint(p: Point, buffer: number): BBox;
         bufferBBox(bbox: BBox, buffer: number): BBox;
         insideBBox(p: Point, bbox: BBox): boolean;
+        offset(p: Point, dx: number, dy: number): Point:
     }
     const units: {
         kilometers: number;
