@@ -53,7 +53,7 @@ cheapRuler.fromTile = function (y, z, units) {
 
 function CheapRuler(lat, units) {
     if (lat === undefined) throw new Error('No latitude given.');
-    if (units && !factors[units]) throw new Error('Unknown unit ' + units + '. Use one of: ' + Object.keys(factors));
+    if (units && !factors[units]) throw new Error('Unknown unit ' + units + '. Use one of: ' + Object.keys(factors).join(', '));
 
     var m = units ? factors[units] : 1;
 
