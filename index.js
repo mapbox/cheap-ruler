@@ -3,20 +3,6 @@
 module.exports = cheapRuler;
 
 /**
- * A collection of very fast approximations to common geodesic measurements. Useful for performance-sensitive code that measures things on a city scale.
- *
- * @param {number} lat latitude
- * @param {string} [units='kilometers']
- * @returns {CheapRuler}
- * @example
- * var ruler = cheapRuler(35.05, 'miles');
- * //=ruler
- */
-function cheapRuler(lat /*: number */, units /*: ?string */) {
-    return new CheapRuler(lat, units);
-}
-
-/**
  * Multipliers for converting between units.
  *
  * @example
@@ -35,6 +21,22 @@ var factors = cheapRuler.units = {
 };
 
 /**
+ * A collection of very fast approximations to common geodesic measurements. Useful for performance-sensitive code that measures things on a city scale.
+ *
+ * @param {number} lat latitude
+ * @param {string} [units='kilometers']
+ * @returns {CheapRuler}
+ * @example
+ * var ruler = cheapRuler(35.05, 'miles');
+ * //=ruler
+ */
+function cheapRuler(lat /*: number */, units /*: ?string */) {
+    if (lat === undefined) throw new Error('No latitude given.');
+    if (units && !factors[units]) throw new Error('Unknown unit ' + units + '. Use one of: ' + Object.keys(factors).join(', '));
+    return new CheapRuler(Math.cos(lat * Math.PI / 180), units);
+}
+
+/**
  * Creates a ruler object from tile coordinates (y and z). Convenient in tile-reduce scripts.
  *
  * @param {number} y
@@ -47,25 +49,21 @@ var factors = cheapRuler.units = {
  */
 cheapRuler.fromTile = function (y, z, units) {
     var n = Math.PI * (1 - 2 * (y + 0.5) / Math.pow(2, z));
-    var lat = Math.atan(0.5 * (Math.exp(n) - Math.exp(-n))) * 180 / Math.PI;
-    return new CheapRuler(lat, units);
+    n = 1 - 2 / (1 + Math.exp(n));
+    var coslat = 2 / (1 + n * n) - 1;
+    return new CheapRuler(coslat, units);
 };
 
-function CheapRuler(lat, units) {
-    if (lat === undefined) throw new Error('No latitude given.');
-    if (units && !factors[units]) throw new Error('Unknown unit ' + units + '. Use one of: ' + Object.keys(factors).join(', '));
-
-    var m = units ? factors[units] : 1;
-
-    var cos = Math.cos(lat * Math.PI / 180);
-    var cos2 = 2 * cos * cos - 1;
-    var cos3 = 2 * cos * cos2 - cos;
-    var cos4 = 2 * cos * cos3 - cos2;
-    var cos5 = 2 * cos * cos4 - cos3;
+function CheapRuler(coslat, units) {
+    var m = factors[units ? units : 'kilometers'];
+    var coslat2 = 2 * coslat * coslat - 1;
+    var coslat3 = 2 * coslat * coslat2 - coslat;
+    var coslat4 = 2 * coslat * coslat3 - coslat2;
+    var coslat5 = 2 * coslat * coslat4 - coslat3;
 
     // multipliers for converting longitude and latitude degrees into distance (http://1.usa.gov/1Wb1bv7)
-    this.kx = m * (111.41513 * cos - 0.09455 * cos3 + 0.00012 * cos5);
-    this.ky = m * (111.13209 - 0.56605 * cos2 + 0.0012 * cos4);
+    this.kx = m * (111.41513 * coslat - 0.09455 * coslat3 + 0.00012 * coslat5);
+    this.ky = m * (111.13209 - 0.56605 * coslat2 + 0.0012 * coslat4);
 }
 
 CheapRuler.prototype = {
