@@ -31,7 +31,7 @@ var factors = cheapRuler.units = {
  * //=ruler
  */
 function cheapRuler(lat /*: number */, units /*: ?string */) {
-    if (coslat === undefined) throw new Error('No latitude given.');
+    if (lat === undefined) throw new Error('No latitude given.');
     if (units && !factors[units]) throw new Error('Unknown unit ' + units + '. Use one of: ' + Object.keys(factors).join(', '));
     return new CheapRuler(Math.cos(lat * Math.PI / 180), units);
 }
