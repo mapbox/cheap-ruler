@@ -99,7 +99,7 @@ CheapRuler.prototype = {
         var dx = (b[0] - a[0]) * this.kx;
         var dy = (b[1] - a[1]) * this.ky;
         if (!dx && !dy) return 0;
-        var bearing = Math.atan2(-dy, dx) * 180 / Math.PI + 90;
+        var bearing = Math.atan2(dx, dy) * 180 / Math.PI;
         if (bearing > 180) bearing -= 360;
         return bearing;
     },
