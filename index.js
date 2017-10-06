@@ -1,6 +1,7 @@
 'use strict'; /* @flow */
 
 module.exports = cheapRuler;
+module.exports.default = cheapRuler;
 
 /**
  * A collection of very fast approximations to common geodesic measurements. Useful for performance-sensitive code that measures things on a city scale.
