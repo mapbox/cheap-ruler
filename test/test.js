@@ -54,7 +54,7 @@ test('bearing', function (t) {
 test('destination', function (t) {
     for (var i = 0; i < points.length; i++) {
         var bearing = (i % 360) - 180;
-        var expected = turf.destination(turf.point(points[i]), 1.0, bearing, 'kilometers').geometry.coordinates;
+        var expected = turf.destination(turf.point(points[i]), 1.0, bearing, {units: 'kilometers'}).geometry.coordinates;
         var actual = ruler.destination(points[i], 1.0, bearing);
         assertErr(t, expected[0], actual[0], 1e-6, 'destination longitude');
         assertErr(t, expected[1], actual[1], 1e-6, 'destination latitude');
@@ -89,7 +89,7 @@ test('along', function (t) {
     for (var i = 0; i < lines.length; i++) {
         var line = turf.lineString(lines[i]);
         var dist = turf.lineDistance(line) / 2;
-        var expected = turf.along(line, dist, 'kilometers').geometry.coordinates;
+        var expected = turf.along(line, dist, {units: 'kilometers'}).geometry.coordinates;
         var actual = ruler.along(lines[i], dist);
         assertErr(t, expected[0], actual[0], 1e-6, 'along longitude');
         assertErr(t, expected[1], actual[1], 1e-6, 'along latitude');
@@ -214,7 +214,7 @@ test('cheapRuler.fromTile', function (t) {
 function turfPointBuffer(p, distance) {
     var dist = Math.sqrt(2) * distance;
     var pt = turf.point(p);
-    var sw = turf.destination(pt, dist, -135, 'miles');
-    var ne = turf.destination(pt, dist, 45, 'miles');
+    var sw = turf.destination(pt, dist, -135, {units: 'miles'});
+    var ne = turf.destination(pt, dist, 45, {units: 'miles'});
     return sw.geometry.coordinates.concat(ne.geometry.coordinates);
 }
