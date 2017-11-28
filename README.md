@@ -127,8 +127,9 @@ var point = ruler.along(line, 2.5);
 
 #### pointOnLine(line, p)
 
-Returns an object of the form `{point, index}` where `point` is closest point on the line from the given point,
-and `index` is the start index of the segment with the closest point.
+Returns an object of the form `{point, index, t}`, where `point` is closest point on the line from the given point,
+`index` is the start index of the segment with the closest point, and `t` is a parameter from 0 to 1 that indicates
+where the closest point is on that segment.
 
 ```js
 var point = ruler.pointOnLine(line, [-67.04, 50.5]).point;
