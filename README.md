@@ -198,7 +198,8 @@ var box = ruler.bufferPoint(p, 200 / cheapRuler.units.inches);
 ## Install
 
 - NPM: `npm install cheap-ruler`
-- Browser build (CDN): https://unpkg.com/cheap-ruler@2.5.0/cheap-ruler.js
+- [Browser build on CDN](https://unpkg.com/cheap-ruler@2.5.1/cheap-ruler.js)
+- [Browser build on CDN (minified)](https://unpkg.com/cheap-ruler@2.5.1/cheap-ruler.min.js)
 
 ## Precision
 
