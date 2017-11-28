@@ -111,8 +111,17 @@ test('along with dist > length', function (t) {
 test('pointOnLine', function (t) {
     // not Turf comparison because pointOnLine is bugged https://github.com/Turfjs/turf/issues/344
     var line = [[-77.031669, 38.878605], [-77.029609, 38.881946]];
-    var p = ruler.pointOnLine(line, [-77.034076, 38.882017]).point;
-    t.same(p, [-77.03052697027461, 38.880457194811896], 'pointOnLine');
+    var result = ruler.pointOnLine(line, [-77.034076, 38.882017]);
+
+    t.same(result, {
+        point: [-77.03052697027461, 38.880457194811896],
+        index: 0,
+        t: 0.5543833618360235
+    }, 'pointOnLine');
+
+    t.equal(ruler.pointOnLine(line, [-80, 38]).t, 0, 't is not less than 0');
+    t.equal(ruler.pointOnLine(line, [-75, 38]).t, 1, 't is not bigger than 1');
+
     t.end();
 });
 
