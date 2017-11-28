@@ -3,9 +3,12 @@
   "version": "2.5.0",
   "description": "A collection of fast approximations to common geographic measurements.",
   "main": "index.js",
+  "jsdelivr": "cheap-ruler.js",
+  "unpkg": "cheap-ruler.js",
   "types": "index.d.ts",
   "dependencies": {},
   "devDependencies": {
+    "@turf/turf": "^5.0.4",
     "benchmark": "^2.1.4",
     "browserify": "^14.5.0",
     "eslint": "^4.12.0",
@@ -13,17 +16,23 @@
     "istanbul": "^0.4.5",
     "node-vincenty": "0.0.6",
     "tape": "^4.8.0",
-    "@turf/turf": "^5.0.4",
-    "typescript": "^2.6.2"
+    "typescript": "^2.6.2",
+    "uglify-js": "^3.2.0"
   },
   "scripts": {
     "pretest": "eslint index.js bench test/*.js && npm run types",
     "test": "tape test/test.js",
     "types": "tsc test/types.ts && rm test/types.js",
     "build": "browserify index.js -s cheapRuler > cheap-ruler.js",
-    "prepublish": "npm run build",
+    "build-min": "browserify index.js -s cheapRuler | uglifyjs -c -m > cheap-ruler.min.js",
+    "prepare": "npm run build && npm run build-min",
     "cov": "istanbul cover tape test/test.js"
   },
+  "files": [
+    "index.d.ts",
+    "cheap-ruler.js",
+    "cheap-ruler.min.js"
+  ],
   "eslintConfig": {
     "extends": "mourner"
   },
