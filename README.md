@@ -215,3 +215,7 @@ A table that shows the margin of error for `ruler.distance` compared to `node-vi
 | 1000km | 0% | 0% | 0.02% | 0.04% | 0.07% | 0.15% | 0.31% | 0.78% | 3.36% |
 
 Errors for all other methods are similar.
+
+## Related
+
+- [cheap-ruler-cpp](https://github.com/mapbox/cheap-ruler-cpp) – C++ port of this library
