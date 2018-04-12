@@ -219,3 +219,4 @@ Errors for all other methods are similar.
 ## Related
 
 - [cheap-ruler-cpp](https://github.com/mapbox/cheap-ruler-cpp) – C++ port of this library
+- [flat-projection](https://github.com/Turbo87/flat-projection-rs) – Rust library based on the same concept
