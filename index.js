@@ -117,10 +117,10 @@ CheapRuler.prototype = {
      * //=point
      */
     destination: function (p, dist, bearing) {
-        var a = (90 - bearing) * Math.PI / 180;
+        var a = bearing * Math.PI / 180;
         return this.offset(p,
-            Math.cos(a) * dist,
-            Math.sin(a) * dist);
+            Math.sin(a) * dist,
+            Math.cos(a) * dist);
     },
 
     /**
