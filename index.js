@@ -55,18 +55,19 @@ cheapRuler.fromTile = function (y, z, units) {
 function CheapRuler(lat, units) {
     if (lat === undefined) throw new Error('No latitude given.');
     if (units && !factors[units]) throw new Error('Unknown unit ' + units + '. Use one of: ' + Object.keys(factors).join(', '));
+    var DEGREE = Math.PI/180;
+    var RE = 6378137.0;
+    var FE = 1/298.257223563;
+    var E2 = FE * (2 - FE);
 
     var m = units ? factors[units] : 1;
+    m *= DEGREE * RE;
 
-    var cos = Math.cos(lat * Math.PI / 180);
-    var cos2 = 2 * cos * cos - 1;
-    var cos3 = 2 * cos * cos2 - cos;
-    var cos4 = 2 * cos * cos3 - cos2;
-    var cos5 = 2 * cos * cos4 - cos3;
-
-    // multipliers for converting longitude and latitude degrees into distance (http://1.usa.gov/1Wb1bv7)
-    this.kx = m * (111.41513 * cos - 0.09455 * cos3 + 0.00012 * cos5);
-    this.ky = m * (111.13209 - 0.56605 * cos2 + 0.0012 * cos4);
+    var coslat = Math.cos(lat * DEGREE);
+    var w2 = 1 / (1 - E2 * (1 - coslat * coslat));
+    var w = Math.sqrt(w2);
+    this.kx = m * w * coslat;
+    this.ky = m * w * w2 * (1 - E2);
 }
 
 CheapRuler.prototype = {
