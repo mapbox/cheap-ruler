@@ -36,6 +36,17 @@ var factors = cheapRuler.units = {
 };
 
 /**
+ * Constants
+ */
+var consts = cheapRuler.constants = {
+    RE: 6378137.0, // IS-GPS
+    FE: 1 / 298.257223563, //IS-GPS
+    DEGREE: Math.PI / 180
+};
+consts.E2 = consts.FE * (2 - consts.FE);
+
+
+/**
  * Creates a ruler object from tile coordinates (y and z). Convenient in tile-reduce scripts.
  *
  * @param {number} y
@@ -55,19 +66,13 @@ cheapRuler.fromTile = function (y, z, units) {
 function CheapRuler(lat, units) {
     if (lat === undefined) throw new Error('No latitude given.');
     if (units && !factors[units]) throw new Error('Unknown unit ' + units + '. Use one of: ' + Object.keys(factors).join(', '));
-    var DEGREE = Math.PI / 180;
-    var RE = 6378137.0;
-    var FE = 1 / 298.257223563;
-    var E2 = FE * (2 - FE);
 
-    var m = units ? factors[units] : 1;
-    m *= DEGREE * RE;
-
-    var coslat = Math.cos(lat * DEGREE);
-    var w2 = 1 / (1 - E2 * (1 - coslat * coslat));
+    var m = consts.DEGREE * consts.RE * units ? factors[units] : 1;
+    var coslat = Math.cos(lat * consts.DEGREE);
+    var w2 = 1 / (1 - consts.E2 * (1 - coslat * coslat));
     var w = Math.sqrt(w2);
     this.kx = m * w * coslat;
-    this.ky = m * w * w2 * (1 - E2);
+    this.ky = m * w * w2 * (1 - consts.E2);
 }
 
 CheapRuler.prototype = {
