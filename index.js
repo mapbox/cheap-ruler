@@ -67,6 +67,10 @@ function CheapRuler(lat, units) {
     if (lat === undefined) throw new Error('No latitude given.');
     if (units && !factors[units]) throw new Error('Unknown unit ' + units + '. Use one of: ' + Object.keys(factors).join(', '));
 
+    /**
+     * Curvature formulas, this.kx = N(lat) and this.ky = M(lat), from
+       https://en.wikipedia.org/wiki/Geographic_coordinate_conversion#Coordinate_system_conversion
+     */    
     var m = consts.DEGREE * consts.RE * units ? factors[units] : 1;
     var coslat = Math.cos(lat * consts.DEGREE);
     var w2 = 1 / (1 - consts.E2 * (1 - coslat * coslat));
