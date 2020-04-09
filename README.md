@@ -3,7 +3,7 @@
 A collection of very fast approximations to common geodesic measurements.
 Useful for performance-sensitive code that measures things on a city scale.
 
-The approximations are based on an [FCC-approved formula of ellipsoidal Earth projection](https://www.gpo.gov/fdsys/pkg/CFR-2005-title47-vol4/pdf/CFR-2005-title47-vol4-sec73-208.pdf).
+The approximations are based on the [WGS84 ellipsoid model of the Earth](https://en.wikipedia.org/wiki/Earth_radius#Meridional).
 For distances under 500 kilometers and not on the poles,
 the results are very precise — within [0.1% margin of error](#precision)
 compared to [Vincenti formulas](https://en.wikipedia.org/wiki/Vincenty%27s_formulae),
@@ -210,9 +210,9 @@ A table that shows the margin of error for `ruler.distance` compared to `node-vi
 | lat | 0&deg; | 10&deg; | 20&deg; | 30&deg; | 40&deg; | 50&deg; | 60&deg; | 70&deg; | 80&deg; |
 | --- |  --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 1km | 0% | 0% | 0% | 0% | 0% | 0% | 0% | 0% | 0% |
-| 100km | 0% | 0% | 0% | 0% | 0% | 0% | 0.01% | 0.01% | 0.04% |
-| 500km | 0% | 0% | 0% | 0.01% | 0.02% | 0.04% | 0.08% | 0.2% | 0.83% |
-| 1000km | 0% | 0% | 0.02% | 0.04% | 0.07% | 0.15% | 0.31% | 0.78% | 3.36% |
+| 100km | 0% | 0% | 0% | 0% | 0% | 0% | 0% | 0.01% | 0.03% |
+| 500km | 0.01% | 0.01% | 0.01% | 0.01% | 0.02% | 0.04% | 0.08% | 0.2% | 0.83% |
+| 1000km | 0.03% | 0.03% | 0.04% | 0.06% | 0.1% | 0.17% | 0.33% | 0.8% | 3.38% |
 
 Errors for all other methods are similar.
 

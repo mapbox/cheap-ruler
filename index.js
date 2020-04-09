@@ -35,16 +35,12 @@ var factors = cheapRuler.units = {
     inches: 1000 / 0.0254
 };
 
-/**
- * Constants
- */
-var consts = cheapRuler.constants = {
-    RE: 6378137.0, // IS-GPS
-    FE: 1 / 298.257223563, //IS-GPS
-    DEGREE: Math.PI / 180
-};
-consts.E2 = consts.FE * (2 - consts.FE);
+// Values that define WGS84 ellipsoid model of the Earth
+const RE = 6378.137; // equatorial radius
+const FE = 1 / 298.257223563; // flattening
 
+const E2 = FE * (2 - FE);
+const RAD = Math.PI / 180;
 
 /**
  * Creates a ruler object from tile coordinates (y and z). Convenient in tile-reduce scripts.
@@ -67,16 +63,13 @@ function CheapRuler(lat, units) {
     if (lat === undefined) throw new Error('No latitude given.');
     if (units && !factors[units]) throw new Error('Unknown unit ' + units + '. Use one of: ' + Object.keys(factors).join(', '));
 
-    /**
-     * Curvature formulas, this.kx = N(lat) and this.ky = M(lat), from
-     * https://en.wikipedia.org/wiki/Geographic_coordinate_conversion#Coordinate_system_conversion
-     */
-    var m = consts.DEGREE * consts.RE * units ? factors[units] : 1;
-    var coslat = Math.cos(lat * consts.DEGREE);
-    var w2 = 1 / (1 - consts.E2 * (1 - coslat * coslat));
+    // Curvature formulas from https://en.wikipedia.org/wiki/Earth_radius#Meridional
+    var m = RAD * RE * (units ? factors[units] : 1);
+    var coslat = Math.cos(lat * RAD);
+    var w2 = 1 / (1 - E2 * (1 - coslat * coslat));
     var w = Math.sqrt(w2);
     this.kx = m * w * coslat;
-    this.ky = m * w * w2 * (1 - consts.E2);
+    this.ky = m * w * w2 * (1 - E2);
 }
 
 CheapRuler.prototype = {

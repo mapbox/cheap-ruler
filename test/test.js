@@ -113,11 +113,7 @@ test('pointOnLine', function (t) {
     var line = [[-77.031669, 38.878605], [-77.029609, 38.881946]];
     var result = ruler.pointOnLine(line, [-77.034076, 38.882017]);
 
-    t.same(result, {
-        point: [-77.03052697027461, 38.880457194811896],
-        index: 0,
-        t: 0.5543833618360235
-    }, 'pointOnLine');
+    t.same(result, {point: [-77.03052689033436, 38.880457324462576], index: 0, t: 0.5544221677861756}, 'pointOnLine');
 
     t.equal(ruler.pointOnLine(line, [-80, 38]).t, 0, 't is not less than 0');
     t.equal(ruler.pointOnLine(line, [-75, 38]).t, 1, 't is not bigger than 1');
@@ -168,7 +164,7 @@ test('lineSlice reverse', function (t) {
     var start = ruler.along(line, dist * 0.7);
     var stop = ruler.along(line, dist * 0.3);
     var actual = ruler.lineDistance(ruler.lineSlice(start, stop, line));
-    t.equal(actual, 0.018676802802910702, 'lineSlice reversed length');
+    t.equal(actual, 0.018676476689649835, 'lineSlice reversed length');
     t.end();
 });
 
@@ -188,7 +184,7 @@ test('bufferPoint', function (t) {
 test('bufferBBox', function (t) {
     var bbox = [30, 38, 40, 39];
     var bbox2 = ruler.bufferBBox(bbox, 1);
-    t.same(bbox2, [29.989319515875376, 37.99098271225711, 40.01068048412462, 39.00901728774289], 'bufferBBox');
+    t.same(bbox2, [29.989319282570946, 37.99098299160844, 40.010680717429054, 39.00901700839156], 'bufferBBox');
     t.end();
 });
 
