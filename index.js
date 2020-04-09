@@ -35,6 +35,13 @@ var factors = cheapRuler.units = {
     inches: 1000 / 0.0254
 };
 
+// Values that define WGS84 ellipsoid model of the Earth
+var RE = 6378.137; // equatorial radius
+var FE = 1 / 298.257223563; // flattening
+
+var E2 = FE * (2 - FE);
+var RAD = Math.PI / 180;
+
 /**
  * Creates a ruler object from tile coordinates (y and z). Convenient in tile-reduce scripts.
  *
@@ -48,7 +55,7 @@ var factors = cheapRuler.units = {
  */
 cheapRuler.fromTile = function (y, z, units) {
     var n = Math.PI * (1 - 2 * (y + 0.5) / Math.pow(2, z));
-    var lat = Math.atan(0.5 * (Math.exp(n) - Math.exp(-n))) * 180 / Math.PI;
+    var lat = Math.atan(0.5 * (Math.exp(n) - Math.exp(-n))) / RAD;
     return new CheapRuler(lat, units);
 };
 
@@ -56,17 +63,15 @@ function CheapRuler(lat, units) {
     if (lat === undefined) throw new Error('No latitude given.');
     if (units && !factors[units]) throw new Error('Unknown unit ' + units + '. Use one of: ' + Object.keys(factors).join(', '));
 
-    var m = units ? factors[units] : 1;
+    // Curvature formulas from https://en.wikipedia.org/wiki/Earth_radius#Meridional
+    var m = RAD * RE * (units ? factors[units] : 1);
+    var coslat = Math.cos(lat * RAD);
+    var w2 = 1 / (1 - E2 * (1 - coslat * coslat));
+    var w = Math.sqrt(w2);
 
-    var cos = Math.cos(lat * Math.PI / 180);
-    var cos2 = 2 * cos * cos - 1;
-    var cos3 = 2 * cos * cos2 - cos;
-    var cos4 = 2 * cos * cos3 - cos2;
-    var cos5 = 2 * cos * cos4 - cos3;
-
-    // multipliers for converting longitude and latitude degrees into distance (http://1.usa.gov/1Wb1bv7)
-    this.kx = m * (111.41513 * cos - 0.09455 * cos3 + 0.00012 * cos5);
-    this.ky = m * (111.13209 - 0.56605 * cos2 + 0.0012 * cos4);
+    // multipliers for converting longitude and latitude degrees into distance
+    this.kx = m * w * coslat;        // based on normal radius of curvature
+    this.ky = m * w * w2 * (1 - E2); // based on meridonal radius of curvature
 }
 
 CheapRuler.prototype = {
@@ -100,7 +105,7 @@ CheapRuler.prototype = {
         var dx = (b[0] - a[0]) * this.kx;
         var dy = (b[1] - a[1]) * this.ky;
         if (!dx && !dy) return 0;
-        var bearing = Math.atan2(dx, dy) * 180 / Math.PI;
+        var bearing = Math.atan2(dx, dy) / RAD;
         if (bearing > 180) bearing -= 360;
         return bearing;
     },
@@ -117,7 +122,7 @@ CheapRuler.prototype = {
      * //=point
      */
     destination: function (p, dist, bearing) {
-        var a = bearing * Math.PI / 180;
+        var a = bearing * RAD;
         return this.offset(p,
             Math.sin(a) * dist,
             Math.cos(a) * dist);
