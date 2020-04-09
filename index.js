@@ -104,10 +104,7 @@ CheapRuler.prototype = {
     bearing: function (a, b) {
         var dx = wrap(b[0] - a[0]) * this.kx;
         var dy = (b[1] - a[1]) * this.ky;
-        if (!dx && !dy) return 0;
-        var bearing = Math.atan2(dx, dy) / RAD;
-        if (bearing > 180) bearing -= 360;
-        return bearing;
+        return Math.atan2(dx, dy) / RAD;
     },
 
     /**
@@ -257,7 +254,7 @@ CheapRuler.prototype = {
             }
 
             dx = wrap(p[0] - x) * this.kx;
-            dy = wrap(p[1] - y) * this.ky;
+            dy = (p[1] - y) * this.ky;
 
             var sqDist = dx * dx + dy * dy;
             if (sqDist < minDist) {
@@ -407,8 +404,8 @@ CheapRuler.prototype = {
     insideBBox: function (p, bbox) {
         return p[0] >= bbox[0] &&
                p[0] <= bbox[2] &&
-               p[1] >= bbox[1] &&
-               p[1] <= bbox[3];
+               wrap(p[1] - bbox[1]) >= 0 &&
+               wrap(p[1] - bbox[3]) <= 0;
     }
 };
 
