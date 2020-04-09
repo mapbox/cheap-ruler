@@ -55,7 +55,7 @@ const RAD = Math.PI / 180;
  */
 cheapRuler.fromTile = function (y, z, units) {
     var n = Math.PI * (1 - 2 * (y + 0.5) / Math.pow(2, z));
-    var lat = Math.atan(0.5 * (Math.exp(n) - Math.exp(-n))) * 180 / Math.PI;
+    var lat = Math.atan(0.5 * (Math.exp(n) - Math.exp(-n))) / RAD;
     return new CheapRuler(lat, units);
 };
 
@@ -68,8 +68,10 @@ function CheapRuler(lat, units) {
     var coslat = Math.cos(lat * RAD);
     var w2 = 1 / (1 - E2 * (1 - coslat * coslat));
     var w = Math.sqrt(w2);
-    this.kx = m * w * coslat;
-    this.ky = m * w * w2 * (1 - E2);
+
+    // multipliers for converting longitude and latitude degrees into distance
+    this.kx = m * w * coslat;        // based on normal radius of curvature
+    this.ky = m * w * w2 * (1 - E2); // based on meridonal radius of curvature
 }
 
 CheapRuler.prototype = {
@@ -103,7 +105,7 @@ CheapRuler.prototype = {
         var dx = (b[0] - a[0]) * this.kx;
         var dy = (b[1] - a[1]) * this.ky;
         if (!dx && !dy) return 0;
-        var bearing = Math.atan2(dx, dy) * 180 / Math.PI;
+        var bearing = Math.atan2(dx, dy) / RAD;
         if (bearing > 180) bearing -= 360;
         return bearing;
     },
@@ -120,7 +122,7 @@ CheapRuler.prototype = {
      * //=point
      */
     destination: function (p, dist, bearing) {
-        var a = bearing * Math.PI / 180;
+        var a = bearing * RAD;
         return this.offset(p,
             Math.sin(a) * dist,
             Math.cos(a) * dist);
