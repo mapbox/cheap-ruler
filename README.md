@@ -1,39 +1,19 @@
 # cheap-ruler [![Build Status](https://travis-ci.org/mapbox/cheap-ruler.svg?branch=master)](https://travis-ci.org/mapbox/cheap-ruler) [![](https://img.shields.io/badge/simply-awesome-brightgreen.svg)](https://github.com/mourner/projects)
 
 A collection of very fast approximations to common geodesic measurements.
-Useful for performance-sensitive code that measures things on a city scale.
+Useful for performance-sensitive code that measures things on a city scale. Can be an order of magnitude faster than corresponding [Turf](http://turfjs.org/) methods.
 
-The approximations are based on the [WGS84 ellipsoid model of the Earth](https://en.wikipedia.org/wiki/Earth_radius#Meridional).
+The approximations are based on the [WGS84 ellipsoid model of the Earth](https://en.wikipedia.org/wiki/Earth_radius#Meridional), projecting coordinates to a flat surface that approximates the ellipsoid around a certain latitude.
 For distances under 500 kilometers and not on the poles,
 the results are very precise — within [0.1% margin of error](#precision)
 compared to [Vincenti formulas](https://en.wikipedia.org/wiki/Vincenty%27s_formulae),
 and usually much less for shorter distances.
 
-## Performance
-
-Compared to corresponding [Turf](http://turfjs.org/) methods (using Node v6):
-
-- `distance`: ~31x faster
-- `bearing`: ~3.6x faster
-- `destination`: ~7.2x faster
-- `lineDistance`: ~31x faster
-- `area`: ~3.4x faster
-- `along`: ~31x faster
-- `pointOnLine`: ~78x faster
-- `lineSlice`: ~60x faster
-
-Additional utility methods:
-
-- `lineSliceAlong`: ~285x faster than `turf.lineSlice(turf.along(...`
-- `bufferPoint`: ~260x faster than creating a bounding box with two diagonal `turf.destination` calls
-- `bufferBBox`: ~260x faster (likewise)
-- `insideBBox`: ~19x faster than `turf.inside(turf.point(p), turf.bboxPolygon(bbox))`
-
 ## Usage
 
 ```js
-var ruler = cheapRuler(35.05, 'miles');
-// ...
+var ruler = cheapRuler(35.05, 'miles'); // calculations around latitude 35
+...
 var distance = ruler.distance([30.51, 50.32], [30.52, 50.312]);
 var lineLength = ruler.lineDistance(line.geometry.coordinates);
 var bbox = ruler.bufferPoint([30.5, 50.5], 0.01);
@@ -53,7 +33,7 @@ Units are one of: `kilometers` (default), `miles`, `nauticalmiles`, `meters`, `y
 
 #### cheapRuler.fromTile(y, z[, units])
 
-Creates a ruler object from tile coordinates (`y` and `z`). Convenient in `tile-reduce` scripts.
+Creates a ruler object from tile coordinates (`y` and `z`).
 
 ```js
 var ruler = cheapRuler.fromTile(1567, 12);
