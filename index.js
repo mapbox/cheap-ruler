@@ -36,11 +36,11 @@ var factors = cheapRuler.units = {
 };
 
 // Values that define WGS84 ellipsoid model of the Earth
-const RE = 6378.137; // equatorial radius
-const FE = 1 / 298.257223563; // flattening
+var RE = 6378.137; // equatorial radius
+var FE = 1 / 298.257223563; // flattening
 
-const E2 = FE * (2 - FE);
-const RAD = Math.PI / 180;
+var E2 = FE * (2 - FE);
+var RAD = Math.PI / 180;
 
 /**
  * Creates a ruler object from tile coordinates (y and z). Convenient in tile-reduce scripts.
