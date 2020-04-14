@@ -17,7 +17,7 @@
     "nyc": "^15.0.1",
     "tape": "^4.13.2",
     "typescript": "^3.8.3",
-    "uglify-js": "^3.8.1"
+    "uglify-js": "^3.9.0"
   },
   "scripts": {
     "pretest": "eslint index.js bench test/*.js && npm run types",

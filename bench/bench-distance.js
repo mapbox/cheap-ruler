@@ -3,13 +3,13 @@
 var runBench = require('./bench-run.js');
 
 var cheapRuler = require('../');
-var turf = require('turf');
+var turf = require('@turf/turf');
 var lines = require('../test/fixtures/lines.json');
 
 runBench({
     'turf.lineDistance': function () {
         for (var i = 0; i < lines.length; i++) {
-            turf.lineDistance(turf.linestring(lines[i]));
+            turf.lineDistance(turf.lineString(lines[i]));
         }
     },
     'ruler.lineDistance': function () {

@@ -3,7 +3,7 @@
 var runBench = require('./bench-run.js');
 
 var cheapRuler = require('../');
-var turf = require('turf');
+var turf = require('@turf/turf');
 var lines = require('../test/fixtures/lines.json');
 
 var polygons = [];

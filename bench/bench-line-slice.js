@@ -3,7 +3,7 @@
 var runBench = require('./bench-run.js');
 
 var cheapRuler = require('../');
-var turf = require('turf');
+var turf = require('@turf/turf');
 var lines = require('../test/fixtures/lines.json');
 
 var ruler = cheapRuler(32.8351);
@@ -22,7 +22,7 @@ runBench({
             turf.lineSlice(
                 turf.point(endpoints[i].start),
                 turf.point(endpoints[i].stop),
-                turf.linestring(lines[i]));
+                turf.lineString(lines[i]));
         }
     },
     'ruler.lineSlice': function () {

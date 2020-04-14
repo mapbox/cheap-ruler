@@ -6,6 +6,7 @@ module.exports = function (config) {
     var suite = new Benchmark.Suite();
 
     for (var name in config) {
+        config[name]();
         suite.add(name, config[name]);
     }
 
