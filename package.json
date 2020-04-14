@@ -28,7 +28,7 @@
     "posttest": "npm run build && npm run types",
     "types": "tsc --noEmit test/types.ts",
     "build": "rollup -c",
-    "prepare": "npm test",
+    "prepublishOnly": "npm test",
     "cov": "nyc tape test/test.js"
   },
   "files": [
