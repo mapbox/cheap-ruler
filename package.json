@@ -6,7 +6,7 @@
   "module": "index.js",
   "jsdelivr": "cheap-ruler.min.js",
   "unpkg": "cheap-ruler.min.js",
-  "types": "index.d.ts",
+  "types": "cheap-ruler.d.ts",
   "dependencies": {},
   "devDependencies": {
     "@rollup/plugin-buble": "^0.21.3",
@@ -20,13 +20,14 @@
     "rollup": "^2.6.1",
     "rollup-plugin-terser": "^5.3.0",
     "tape": "^4.13.2",
+    "ts-node": "^8.8.2",
     "typescript": "^3.8.3"
   },
   "scripts": {
     "pretest": "eslint index.js bench test/*.js",
     "test": "tape -r esm test/test.js",
     "posttest": "npm run build && npm run types",
-    "types": "tsc --noEmit test/types.ts",
+    "types": "ts-node test/types.ts",
     "build": "rollup -c",
     "prepublishOnly": "npm test",
     "cov": "nyc tape test/test.js"
