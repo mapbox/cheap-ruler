@@ -402,10 +402,10 @@ CheapRuler.prototype = {
      * //=inside
      */
     insideBBox: function (p, bbox) {
-        return p[0] >= bbox[0] &&
-               p[0] <= bbox[2] &&
-               wrap(p[1] - bbox[1]) >= 0 &&
-               wrap(p[1] - bbox[3]) <= 0;
+        return wrap(p[0] - bbox[0]) >= 0 &&
+               wrap(p[0] - bbox[2]) <= 0 &&
+               p[1] >= bbox[1] &&
+               p[1] <= bbox[3];
     }
 };
 
