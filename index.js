@@ -86,7 +86,7 @@ CheapRuler.prototype = {
      * //=distance
      */
     distance: function (a, b) {
-        var dx = (a[0] - b[0]) * this.kx;
+        var dx = wrap(a[0] - b[0]) * this.kx;
         var dy = (a[1] - b[1]) * this.ky;
         return Math.sqrt(dx * dx + dy * dy);
     },
@@ -102,12 +102,9 @@ CheapRuler.prototype = {
      * //=bearing
      */
     bearing: function (a, b) {
-        var dx = (b[0] - a[0]) * this.kx;
+        var dx = wrap(b[0] - a[0]) * this.kx;
         var dy = (b[1] - a[1]) * this.ky;
-        if (!dx && !dy) return 0;
-        var bearing = Math.atan2(dx, dy) / RAD;
-        if (bearing > 180) bearing -= 360;
-        return bearing;
+        return Math.atan2(dx, dy) / RAD;
     },
 
     /**
@@ -185,7 +182,7 @@ CheapRuler.prototype = {
             var ring = polygon[i];
 
             for (var j = 0, len = ring.length, k = len - 1; j < len; k = j++) {
-                sum += (ring[j][0] - ring[k][0]) * (ring[j][1] + ring[k][1]) * (i ? -1 : 1);
+                sum += wrap(ring[j][0] - ring[k][0]) * (ring[j][1] + ring[k][1]) * (i ? -1 : 1);
             }
         }
 
@@ -239,12 +236,12 @@ CheapRuler.prototype = {
 
             var x = line[i][0];
             var y = line[i][1];
-            var dx = (line[i + 1][0] - x) * this.kx;
+            var dx = wrap(line[i + 1][0] - x) * this.kx;
             var dy = (line[i + 1][1] - y) * this.ky;
 
             if (dx !== 0 || dy !== 0) {
 
-                var t = ((p[0] - x) * this.kx * dx + (p[1] - y) * this.ky * dy) / (dx * dx + dy * dy);
+                var t = (wrap(p[0] - x) * this.kx * dx + (p[1] - y) * this.ky * dy) / (dx * dx + dy * dy);
 
                 if (t > 1) {
                     x = line[i + 1][0];
@@ -256,7 +253,7 @@ CheapRuler.prototype = {
                 }
             }
 
-            dx = (p[0] - x) * this.kx;
+            dx = wrap(p[0] - x) * this.kx;
             dy = (p[1] - y) * this.ky;
 
             var sqDist = dx * dx + dy * dy;
@@ -405,8 +402,8 @@ CheapRuler.prototype = {
      * //=inside
      */
     insideBBox: function (p, bbox) {
-        return p[0] >= bbox[0] &&
-               p[0] <= bbox[2] &&
+        return wrap(p[0] - bbox[0]) >= 0 &&
+               wrap(p[0] - bbox[2]) <= 0 &&
                p[1] >= bbox[1] &&
                p[1] <= bbox[3];
     }
@@ -417,10 +414,17 @@ function equals(a, b) {
 }
 
 function interpolate(a, b, t) {
-    var dx = b[0] - a[0];
+    var dx = wrap(b[0] - a[0]);
     var dy = b[1] - a[1];
     return [
         a[0] + dx * t,
         a[1] + dy * t
     ];
+}
+
+// normalize a degree value into [-180..180] range
+function wrap(deg) {
+    while (deg < -180) deg += 360;
+    while (deg > 180) deg -= 360;
+    return deg;
 }

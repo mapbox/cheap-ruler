@@ -32,6 +32,16 @@ test('distance', function (t) {
     t.end();
 });
 
+test('distance over dateline', function (t) {
+    var p0 = [179.9, 32.7];
+    var p1 = [-179.9, 32.9];
+    var expected = turf.distance(turf.point(p0), turf.point(p1));
+    var actual = ruler.distance(p0, p1);
+    assertErr(t, expected, actual, 0.001, 'distance');
+    t.pass('distance within 0.1%');
+    t.end();
+});
+
 test('distance in miles', function (t) {
     var d = ruler.distance([30.5, 32.8351], [30.51, 32.8451]);
     var d2 = milesRuler.distance([30.5, 32.8351], [30.51, 32.8451]);
@@ -48,6 +58,16 @@ test('bearing', function (t) {
         assertErr(t, expected, actual, 0.005, 'bearing');
     }
     t.pass('bearing within 0.05%');
+    t.end();
+});
+
+test('bearing over dateline', function (t) {
+    var p0 = [179.9, 32.7];
+    var p1 = [-179.9, 32.9];
+    var expected = turf.bearing(turf.point(p0), turf.point(p1));
+    var actual = ruler.bearing(p0, p1);
+    assertErr(t, expected, actual, 0.005, 'bearing');
+    t.pass('bearing within 0.5%');
     t.end();
 });
 
@@ -108,6 +128,17 @@ test('along with dist > length', function (t) {
     t.end();
 });
 
+test('along over dateline', function (t) {
+    var line = [[179.9, 32.7], [-179.9, 32.9]];
+    var turfLine = turf.lineString(line);
+    var dist = turf.lineDistance(turfLine) / 3;
+    var expected = turf.along(turfLine, dist).geometry.coordinates;
+    var actual = ruler.along(line, dist);
+
+    t.ok(ruler.distance(expected, actual) < 0.02);
+    t.end();
+});
+
 test('pointOnLine', function (t) {
     // not Turf comparison because pointOnLine is bugged https://github.com/Turfjs/turf/issues/344
     var line = [[-77.031669, 38.878605], [-77.029609, 38.881946]];
@@ -118,6 +149,13 @@ test('pointOnLine', function (t) {
     t.equal(ruler.pointOnLine(line, [-80, 38]).t, 0, 't is not less than 0');
     t.equal(ruler.pointOnLine(line, [-75, 38]).t, 1, 't is not bigger than 1');
 
+    t.end();
+});
+
+test('pointOnLine over dateline', function (t) {
+    var line = [[179.9, 32.7], [-179.9, 32.9]];
+    var actual = ruler.pointOnLine(line, [180, 32.7]);
+    t.same(actual.point, [179.9416136283502, 32.7416136283502]);
     t.end();
 });
 
@@ -192,6 +230,11 @@ test('insideBBox', function (t) {
     var bbox = [30, 38, 40, 39];
     t.ok(ruler.insideBBox([35, 38.5], bbox), 'insideBBox inside');
     t.notOk(ruler.insideBBox([45, 45], bbox), 'insideBBox outside');
+    t.end();
+});
+
+test('insideBBox over dateline', function (t) {
+    t.ok(ruler.insideBBox([180, 32.8], [179.9, 32.7, -179.9, 32.9]));
     t.end();
 });
 
