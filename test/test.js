@@ -1,81 +1,81 @@
-'use strict';
+import {test} from 'tape';
+import CheapRuler from '../index.js';
+import * as turf from '@turf/turf';
+import lines from './fixtures/lines.json';
 
-var test = require('tape').test;
-var createRuler = require('../');
-var turf = require('@turf/turf');
-var lines = require('./fixtures/lines.json');
-var points = Array.prototype.concat.apply([], lines);
+const points = Array.prototype.concat.apply([], lines);
 
-var ruler = createRuler(32.8351);
-var milesRuler = createRuler(32.8351, 'miles');
+const ruler = new CheapRuler(32.8351);
+const milesRuler = new CheapRuler(32.8351, 'miles');
 
 function assertErr(t, actual, expected, maxErr, description) {
-    if (isNaN(actual) || isNaN(expected)) t.fail(description + ' produced NaN');
-    var err = Math.abs((actual - expected) / expected);
-    if (err > maxErr) t.fail(description + ', err: ' + err);
+    if (isNaN(actual) || isNaN(expected)) t.fail(`${description} produced NaN`);
+    const err = Math.abs((actual - expected) / expected);
+    if (err > maxErr) t.fail(`${description}, err: ${err}`);
 }
 
-test('cheapRuler constructor', function (t) {
-    t.throws(function () {
-        createRuler();
+test('cheapRuler constructor', (t) => {
+    t.throws(() => {
+        const ruler = new CheapRuler();
+        ruler.distance(null, null);
     }, 'errors without latitude');
     t.end();
 });
 
-test('distance', function (t) {
-    for (var i = 0; i < points.length - 1; i++) {
-        var expected = turf.distance(turf.point(points[i]), turf.point(points[i + 1]));
-        var actual = ruler.distance(points[i], points[i + 1]);
+test('distance', (t) => {
+    for (let i = 0; i < points.length - 1; i++) {
+        const expected = turf.distance(turf.point(points[i]), turf.point(points[i + 1]));
+        const actual = ruler.distance(points[i], points[i + 1]);
         assertErr(t, expected, actual, 0.003, 'distance');
     }
     t.pass('distance within 0.3%');
     t.end();
 });
 
-test('distance over dateline', function (t) {
-    var p0 = [179.9, 32.7];
-    var p1 = [-179.9, 32.9];
-    var expected = turf.distance(turf.point(p0), turf.point(p1));
-    var actual = ruler.distance(p0, p1);
+test('distance over dateline', (t) => {
+    const p0 = [179.9, 32.7];
+    const p1 = [-179.9, 32.9];
+    const expected = turf.distance(turf.point(p0), turf.point(p1));
+    const actual = ruler.distance(p0, p1);
     assertErr(t, expected, actual, 0.001, 'distance');
     t.pass('distance within 0.1%');
     t.end();
 });
 
-test('distance in miles', function (t) {
-    var d = ruler.distance([30.5, 32.8351], [30.51, 32.8451]);
-    var d2 = milesRuler.distance([30.5, 32.8351], [30.51, 32.8451]);
+test('distance in miles', (t) => {
+    const d = ruler.distance([30.5, 32.8351], [30.51, 32.8451]);
+    const d2 = milesRuler.distance([30.5, 32.8351], [30.51, 32.8451]);
 
     assertErr(t, d / d2, 1.609344, 1e-12, 'distance in miles');
     t.pass('distance in miles');
     t.end();
 });
 
-test('bearing', function (t) {
-    for (var i = 0; i < points.length - 1; i++) {
-        var expected = turf.bearing(turf.point(points[i]), turf.point(points[i + 1]));
-        var actual = ruler.bearing(points[i], points[i + 1]);
+test('bearing', (t) => {
+    for (let i = 0; i < points.length - 1; i++) {
+        const expected = turf.bearing(turf.point(points[i]), turf.point(points[i + 1]));
+        const actual = ruler.bearing(points[i], points[i + 1]);
         assertErr(t, expected, actual, 0.005, 'bearing');
     }
     t.pass('bearing within 0.05%');
     t.end();
 });
 
-test('bearing over dateline', function (t) {
-    var p0 = [179.9, 32.7];
-    var p1 = [-179.9, 32.9];
-    var expected = turf.bearing(turf.point(p0), turf.point(p1));
-    var actual = ruler.bearing(p0, p1);
+test('bearing over dateline', (t) => {
+    const p0 = [179.9, 32.7];
+    const p1 = [-179.9, 32.9];
+    const expected = turf.bearing(turf.point(p0), turf.point(p1));
+    const actual = ruler.bearing(p0, p1);
     assertErr(t, expected, actual, 0.005, 'bearing');
     t.pass('bearing within 0.5%');
     t.end();
 });
 
-test('destination', function (t) {
-    for (var i = 0; i < points.length; i++) {
-        var bearing = (i % 360) - 180;
-        var expected = turf.destination(turf.point(points[i]), 1.0, bearing, {units: 'kilometers'}).geometry.coordinates;
-        var actual = ruler.destination(points[i], 1.0, bearing);
+test('destination', (t) => {
+    for (let i = 0; i < points.length; i++) {
+        const bearing = (i % 360) - 180;
+        const expected = turf.destination(turf.point(points[i]), 1.0, bearing, {units: 'kilometers'}).geometry.coordinates;
+        const actual = ruler.destination(points[i], 1.0, bearing);
         assertErr(t, expected[0], actual[0], 1e-6, 'destination longitude');
         assertErr(t, expected[1], actual[1], 1e-6, 'destination latitude');
     }
@@ -83,34 +83,34 @@ test('destination', function (t) {
     t.end();
 });
 
-test('lineDistance', function (t) {
-    for (var i = 0; i < lines.length; i++) {
-        var expected = turf.lineDistance(turf.lineString(lines[i]));
-        var actual = ruler.lineDistance(lines[i]);
+test('lineDistance', (t) => {
+    for (let i = 0; i < lines.length; i++) {
+        const expected = turf.lineDistance(turf.lineString(lines[i]));
+        const actual = ruler.lineDistance(lines[i]);
         assertErr(t, expected, actual, 0.003, 'lineDistance');
     }
     t.pass('lineDistance within 0.3%');
     t.end();
 });
 
-test('area', function (t) {
-    for (var i = 0; i < lines.length; i++) {
+test('area', (t) => {
+    for (let i = 0; i < lines.length; i++) {
         if (lines[i].length < 3) continue;
-        var poly = turf.polygon([lines[i].concat([lines[i][0]])]);
-        var expected = turf.area(poly) / 1e6;
-        var actual = ruler.area([lines[i]]);
+        const poly = turf.polygon([lines[i].concat([lines[i][0]])]);
+        const expected = turf.area(poly) / 1e6;
+        const actual = ruler.area([lines[i]]);
         assertErr(t, expected, actual, 0.003, 'area');
     }
     t.pass('area within 0.3%');
     t.end();
 });
 
-test('along', function (t) {
-    for (var i = 0; i < lines.length; i++) {
-        var line = turf.lineString(lines[i]);
-        var dist = turf.lineDistance(line) / 2;
-        var expected = turf.along(line, dist, {units: 'kilometers'}).geometry.coordinates;
-        var actual = ruler.along(lines[i], dist);
+test('along', (t) => {
+    for (let i = 0; i < lines.length; i++) {
+        const line = turf.lineString(lines[i]);
+        const dist = turf.lineDistance(line) / 2;
+        const expected = turf.along(line, dist, {units: 'kilometers'}).geometry.coordinates;
+        const actual = ruler.along(lines[i], dist);
         assertErr(t, expected[0], actual[0], 1e-6, 'along longitude');
         assertErr(t, expected[1], actual[1], 1e-6, 'along latitude');
     }
@@ -118,31 +118,31 @@ test('along', function (t) {
     t.end();
 });
 
-test('along with dist <= 0', function (t) {
+test('along with dist <= 0', (t) => {
     t.same(ruler.along(lines[0], -5), lines[0][0], 'first point');
     t.end();
 });
 
-test('along with dist > length', function (t) {
+test('along with dist > length', (t) => {
     t.same(ruler.along(lines[0], 1000), lines[0][lines[0].length - 1], 'last point');
     t.end();
 });
 
-test('along over dateline', function (t) {
-    var line = [[179.9, 32.7], [-179.9, 32.9]];
-    var turfLine = turf.lineString(line);
-    var dist = turf.lineDistance(turfLine) / 3;
-    var expected = turf.along(turfLine, dist).geometry.coordinates;
-    var actual = ruler.along(line, dist);
+test('along over dateline', (t) => {
+    const line = [[179.9, 32.7], [-179.9, 32.9]];
+    const turfLine = turf.lineString(line);
+    const dist = turf.lineDistance(turfLine) / 3;
+    const expected = turf.along(turfLine, dist).geometry.coordinates;
+    const actual = ruler.along(line, dist);
 
     t.ok(ruler.distance(expected, actual) < 0.02);
     t.end();
 });
 
-test('pointOnLine', function (t) {
+test('pointOnLine', (t) => {
     // not Turf comparison because pointOnLine is bugged https://github.com/Turfjs/turf/issues/344
-    var line = [[-77.031669, 38.878605], [-77.029609, 38.881946]];
-    var result = ruler.pointOnLine(line, [-77.034076, 38.882017]);
+    const line = [[-77.031669, 38.878605], [-77.029609, 38.881946]];
+    const result = ruler.pointOnLine(line, [-77.034076, 38.882017]);
 
     t.same(result, {point: [-77.03052689033436, 38.880457324462576], index: 0, t: 0.5544221677861756}, 'pointOnLine');
 
@@ -152,24 +152,24 @@ test('pointOnLine', function (t) {
     t.end();
 });
 
-test('pointOnLine over dateline', function (t) {
-    var line = [[179.9, 32.7], [-179.9, 32.9]];
-    var actual = ruler.pointOnLine(line, [180, 32.7]);
+test('pointOnLine over dateline', (t) => {
+    const line = [[179.9, 32.7], [-179.9, 32.9]];
+    const actual = ruler.pointOnLine(line, [180, 32.7]);
     t.same(actual.point, [179.9416136283502, 32.7416136283502]);
     t.end();
 });
 
-test('lineSlice', function (t) {
-    for (var i = 0; i < lines.length; i++) {
-        var line = lines[i];
-        var dist = ruler.lineDistance(line);
-        var start = ruler.along(line, dist * 0.3);
-        var stop = ruler.along(line, dist * 0.7);
+test('lineSlice', (t) => {
+    for (let i = 0; i < lines.length; i++) {
+        const line = lines[i];
+        const dist = ruler.lineDistance(line);
+        const start = ruler.along(line, dist * 0.3);
+        const stop = ruler.along(line, dist * 0.7);
 
-        var expected = ruler.lineDistance(turf.lineSlice(
+        const expected = ruler.lineDistance(turf.lineSlice(
             turf.point(start), turf.point(stop), turf.lineString(line)).geometry.coordinates);
 
-        var actual = ruler.lineDistance(ruler.lineSlice(start, stop, line));
+        const actual = ruler.lineDistance(ruler.lineSlice(start, stop, line));
 
         assertErr(t, expected, actual, 1e-5, 'lineSlice length');
     }
@@ -177,18 +177,18 @@ test('lineSlice', function (t) {
     t.end();
 });
 
-test('lineSliceAlong', function (t) {
-    for (var i = 0; i < lines.length; i++) {
+test('lineSliceAlong', (t) => {
+    for (let i = 0; i < lines.length; i++) {
         if (i === 46) continue; // skip due to Turf bug https://github.com/Turfjs/turf/issues/351
 
-        var line = lines[i];
-        var dist = ruler.lineDistance(line);
-        var start = ruler.along(line, dist * 0.3);
-        var stop = ruler.along(line, dist * 0.7);
+        const line = lines[i];
+        const dist = ruler.lineDistance(line);
+        const start = ruler.along(line, dist * 0.3);
+        const stop = ruler.along(line, dist * 0.7);
 
-        var expected = ruler.lineDistance(turf.lineSlice(
+        const expected = ruler.lineDistance(turf.lineSlice(
             turf.point(start), turf.point(stop), turf.lineString(line)).geometry.coordinates);
-        var actual = ruler.lineDistance(ruler.lineSliceAlong(dist * 0.3, dist * 0.7, line));
+        const actual = ruler.lineDistance(ruler.lineSliceAlong(dist * 0.3, dist * 0.7, line));
 
         assertErr(t, expected, actual, 1e-5, 'lineSliceAlong length');
     }
@@ -196,20 +196,20 @@ test('lineSliceAlong', function (t) {
     t.end();
 });
 
-test('lineSlice reverse', function (t) {
-    var line = lines[0];
-    var dist = ruler.lineDistance(line);
-    var start = ruler.along(line, dist * 0.7);
-    var stop = ruler.along(line, dist * 0.3);
-    var actual = ruler.lineDistance(ruler.lineSlice(start, stop, line));
+test('lineSlice reverse', (t) => {
+    const line = lines[0];
+    const dist = ruler.lineDistance(line);
+    const start = ruler.along(line, dist * 0.7);
+    const stop = ruler.along(line, dist * 0.3);
+    const actual = ruler.lineDistance(ruler.lineSlice(start, stop, line));
     t.equal(actual, 0.018676476689649835, 'lineSlice reversed length');
     t.end();
 });
 
-test('bufferPoint', function (t) {
-    for (var i = 0; i < points.length; i++) {
-        var expected = turfPointBuffer(points[i], 0.1);
-        var actual = milesRuler.bufferPoint(points[i], 0.1);
+test('bufferPoint', (t) => {
+    for (let i = 0; i < points.length; i++) {
+        const expected = turfPointBuffer(points[i], 0.1);
+        const actual = milesRuler.bufferPoint(points[i], 0.1);
         assertErr(t, expected[0], actual[0], 2e-7, 'bufferPoint west');
         assertErr(t, expected[1], actual[1], 2e-7, 'bufferPoint east');
         assertErr(t, expected[2], actual[2], 2e-7, 'bufferPoint south');
@@ -219,31 +219,31 @@ test('bufferPoint', function (t) {
     t.end();
 });
 
-test('bufferBBox', function (t) {
-    var bbox = [30, 38, 40, 39];
-    var bbox2 = ruler.bufferBBox(bbox, 1);
+test('bufferBBox', (t) => {
+    const bbox = [30, 38, 40, 39];
+    const bbox2 = ruler.bufferBBox(bbox, 1);
     t.same(bbox2, [29.989319282570946, 37.99098299160844, 40.010680717429054, 39.00901700839156], 'bufferBBox');
     t.end();
 });
 
-test('insideBBox', function (t) {
-    var bbox = [30, 38, 40, 39];
+test('insideBBox', (t) => {
+    const bbox = [30, 38, 40, 39];
     t.ok(ruler.insideBBox([35, 38.5], bbox), 'insideBBox inside');
     t.notOk(ruler.insideBBox([45, 45], bbox), 'insideBBox outside');
     t.end();
 });
 
-test('insideBBox over dateline', function (t) {
+test('insideBBox over dateline', (t) => {
     t.ok(ruler.insideBBox([180, 32.8], [179.9, 32.7, -179.9, 32.9]));
     t.end();
 });
 
-test('cheapRuler.fromTile', function (t) {
-    var ruler1 = createRuler(50.5);
-    var ruler2 = createRuler.fromTile(11041, 15);
+test('cheapRuler.fromTile', (t) => {
+    const ruler1 = new CheapRuler(50.5);
+    const ruler2 = CheapRuler.fromTile(11041, 15);
 
-    var p1 = [30.5, 50.5];
-    var p2 = [30.51, 50.51];
+    const p1 = [30.5, 50.5];
+    const p2 = [30.51, 50.51];
 
     assertErr(t, ruler1.distance(p1, p2), ruler2.distance(p1, p2), 2e-5, 'cheapRuler.fromTile distance');
 
@@ -251,9 +251,9 @@ test('cheapRuler.fromTile', function (t) {
 });
 
 function turfPointBuffer(p, distance) {
-    var dist = Math.sqrt(2) * distance;
-    var pt = turf.point(p);
-    var sw = turf.destination(pt, dist, -135, {units: 'miles'});
-    var ne = turf.destination(pt, dist, 45, {units: 'miles'});
+    const dist = Math.sqrt(2) * distance;
+    const pt = turf.point(p);
+    const sw = turf.destination(pt, dist, -135, {units: 'miles'});
+    const ne = turf.destination(pt, dist, 45, {units: 'miles'});
     return sw.geometry.coordinates.concat(ne.geometry.coordinates);
 }

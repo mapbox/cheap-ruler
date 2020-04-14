@@ -1,16 +1,15 @@
-import * as cheapRuler from '../'
-import { Point, Polygon, Line } from '../'
+import CheapRuler from '../cheap-ruler.js'
 
 /**
  * Declare variables
  */
-const point1: Point = [30.5, 50.5]
-const point2: Point = [30.51, 50.49]
-const polygon: Polygon = [[
+const point1 = [30.5, 50.5]
+const point2 = [30.51, 50.49]
+const polygon = [[
     [-67.031, 50.458], [-67.031, 50.534], [-66.929, 50.534],
     [-66.929, 50.458], [-67.031, 50.458]
 ]]
-const line: Line = [
+const line = [
     [-67.031, 50.458], [-67.031, 50.534],
     [-66.929, 50.534], [-66.929, 50.458]
 ]
@@ -18,8 +17,7 @@ const line: Line = [
 /**
  * Test Types
  */
-const units = cheapRuler.units
-const ruler = cheapRuler(35.05, 'miles')
+const ruler = new CheapRuler(35.05, 'miles')
 ruler.distance(point1, point2)
 ruler.bearing(point1, point2)
 ruler.destination(point1, 0.1, 90)
