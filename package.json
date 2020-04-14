@@ -25,9 +25,10 @@
   "scripts": {
     "pretest": "eslint index.js bench test/*.js",
     "test": "tape -r esm test/test.js",
-    "types": "tsc test/types.ts && rm test/types.js",
+    "posttest": "npm run build && npm run types",
+    "types": "tsc --noEmit test/types.ts",
     "build": "rollup -c",
-    "prepare": "npm run build && npm run types",
+    "prepare": "npm test",
     "cov": "nyc tape test/test.js"
   },
   "files": [
