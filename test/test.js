@@ -250,6 +250,11 @@ test('cheapRuler.fromTile', (t) => {
     t.end();
 });
 
+test('cheapRuler.units', (t) => {
+    t.equal(CheapRuler.units.kilometers, 1);
+    t.end();
+});
+
 function turfPointBuffer(p, distance) {
     const dist = Math.sqrt(2) * distance;
     const pt = turf.point(p);

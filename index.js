@@ -53,7 +53,7 @@ export default class CheapRuler {
         return new CheapRuler(lat, units);
     }
 
-    static units() {
+    static get units() {
         return factors;
     }
 
