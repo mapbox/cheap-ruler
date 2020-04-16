@@ -53,6 +53,10 @@ export default class CheapRuler {
         return new CheapRuler(lat, units);
     }
 
+    static get units() {
+        return factors;
+    }
+
     /**
      * Creates a ruler instance for very fast approximations to common geodesic measurements around a certain latitude.
      *
@@ -411,8 +415,6 @@ export default class CheapRuler {
                p[1] <= bbox[3];
     }
 }
-
-CheapRuler.units = factors;
 
 function equals(a, b) {
     return a[0] === b[0] && a[1] === b[1];
