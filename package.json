@@ -1,6 +1,6 @@
 {
   "name": "cheap-ruler",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "A collection of fast approximations to common geographic measurements.",
   "main": "cheap-ruler.js",
   "module": "index.js",
