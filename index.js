@@ -32,7 +32,7 @@ const RAD = Math.PI / 180;
  * @param {string} [units='kilometers']
  * @returns {CheapRuler}
  * @example
- * var ruler = cheapRuler(35.05, 'miles');
+ * const ruler = cheapRuler(35.05, 'miles');
  * //=ruler
  */
 export default class CheapRuler {
@@ -44,7 +44,7 @@ export default class CheapRuler {
      * @param {string} [units='kilometers']
      * @returns {CheapRuler}
      * @example
-     * var ruler = cheapRuler.fromTile(1567, 12);
+     * const ruler = cheapRuler.fromTile(1567, 12);
      * //=ruler
      */
     static fromTile(y, z, units) {
@@ -64,7 +64,7 @@ export default class CheapRuler {
      * @param {string} [units='kilometers']
      * @returns {CheapRuler}
      * @example
-     * var ruler = cheapRuler(35.05, 'miles');
+     * const ruler = cheapRuler(35.05, 'miles');
      * //=ruler
      */
     constructor(lat, units) {
@@ -89,7 +89,7 @@ export default class CheapRuler {
      * @param {Array<number>} b point [longitude, latitude]
      * @returns {number} distance
      * @example
-     * var distance = ruler.distance([30.5, 50.5], [30.51, 50.49]);
+     * const distance = ruler.distance([30.5, 50.5], [30.51, 50.49]);
      * //=distance
      */
     distance(a, b) {
@@ -105,7 +105,7 @@ export default class CheapRuler {
      * @param {Array<number>} b point [longitude, latitude]
      * @returns {number} bearing
      * @example
-     * var bearing = ruler.bearing([30.5, 50.5], [30.51, 50.49]);
+     * const bearing = ruler.bearing([30.5, 50.5], [30.51, 50.49]);
      * //=bearing
      */
     bearing(a, b) {
@@ -122,7 +122,7 @@ export default class CheapRuler {
      * @param {number} bearing
      * @returns {Array<number>} point [longitude, latitude]
      * @example
-     * var point = ruler.destination([30.5, 50.5], 0.1, 90);
+     * const point = ruler.destination([30.5, 50.5], 0.1, 90);
      * //=point
      */
     destination(p, dist, bearing) {
@@ -140,7 +140,7 @@ export default class CheapRuler {
      * @param {number} dy northing
      * @returns {Array<number>} point [longitude, latitude]
      * @example
-     * var point = ruler.offset([30.5, 50.5], 10, 10);
+     * const point = ruler.offset([30.5, 50.5], 10, 10);
      * //=point
      */
     offset(p, dx, dy) {
@@ -156,7 +156,7 @@ export default class CheapRuler {
      * @param {Array<Array<number>>} points [longitude, latitude]
      * @returns {number} total line distance
      * @example
-     * var length = ruler.lineDistance([
+     * const length = ruler.lineDistance([
      *     [-67.031, 50.458], [-67.031, 50.534],
      *     [-66.929, 50.534], [-66.929, 50.458]
      * ]);
@@ -176,7 +176,7 @@ export default class CheapRuler {
      * @param {Array<Array<Array<number>>>} polygon
      * @returns {number} area value in the specified units (square kilometers by default)
      * @example
-     * var area = ruler.area([[
+     * const area = ruler.area([[
      *     [-67.031, 50.458], [-67.031, 50.534], [-66.929, 50.534],
      *     [-66.929, 50.458], [-67.031, 50.458]
      * ]]);
@@ -203,7 +203,7 @@ export default class CheapRuler {
      * @param {number} dist distance
      * @returns {Array<number>} point [longitude, latitude]
      * @example
-     * var point = ruler.along(line, 2.5);
+     * const point = ruler.along(line, 2.5);
      * //=point
      */
     along(line, dist) {
@@ -223,16 +223,52 @@ export default class CheapRuler {
     }
 
     /**
+     * Returns the distance from a point `p` to a line segment `a` to `b`.
+     *
+     * @pointToSegmentDistance
+     * @param {Array<number>} p point [longitude, latitude]
+     * @param {Array<number>} p1 segment point 1 [longitude, latitude]
+     * @param {Array<number>} p2 segment point 2 [longitude, latitude]
+     * @returns {number} distance
+     * @example
+     * const distance = ruler.pointToSegmentDistance([-67.04, 50.5], [-67.05, 50.57], [-67.03, 50.54]);
+     * //=distance
+     */
+    pointToSegmentDistance(p, a, b) {
+        let [x, y] = a;
+        let dx = wrap(b[0] - x) * this.kx;
+        let dy = (b[1] - y) * this.ky;
+        let t = 0;
+
+        if (dx !== 0 || dy !== 0) {
+            t = (wrap(p[0] - x) * this.kx * dx + (p[1] - y) * this.ky * dy) / (dx * dx + dy * dy);
+
+            if (t > 1) {
+                x = b[0];
+                y = b[1];
+
+            } else if (t > 0) {
+                x += (dx / this.kx) * t;
+                y += (dy / this.ky) * t;
+            }
+        }
+
+        dx = wrap(p[0] - x) * this.kx;
+        dy = (p[1] - y) * this.ky;
+
+        return Math.sqrt(dx * dx + dy * dy);
+    }
+
+    /**
      * Returns an object of the form {point, index, t}, where point is closest point on the line
      * from the given point, index is the start index of the segment with the closest point,
      * and t is a parameter from 0 to 1 that indicates where the closest point is on that segment.
      *
-     * @pointOnLine
      * @param {Array<Array<number>>} line
      * @param {Array<number>} p point [longitude, latitude]
      * @returns {Object} {point, index, t}
      * @example
-     * var point = ruler.pointOnLine(line, [-67.04, 50.5]).point;
+     * const point = ruler.pointOnLine(line, [-67.04, 50.5]).point;
      * //=point
      */
     pointOnLine(line, p) {
@@ -288,7 +324,7 @@ export default class CheapRuler {
      * @param {Array<Array<number>>} line
      * @returns {Array<Array<number>>} line part of a line
      * @example
-     * var line2 = ruler.lineSlice([-67.04, 50.5], [-67.05, 50.56], line1);
+     * const line2 = ruler.lineSlice([-67.04, 50.5], [-67.05, 50.56], line1);
      * //=line2
      */
     lineSlice(start, stop, line) {
@@ -327,7 +363,7 @@ export default class CheapRuler {
      * @param {Array<Array<number>>} line
      * @returns {Array<Array<number>>} line part of a line
      * @example
-     * var line2 = ruler.lineSliceAlong(10, 20, line1);
+     * const line2 = ruler.lineSliceAlong(10, 20, line1);
      * //=line2
      */
     lineSliceAlong(start, stop, line) {
@@ -363,7 +399,7 @@ export default class CheapRuler {
      * @param {number} buffer
      * @returns {Array<number>} box object ([w, s, e, n])
      * @example
-     * var bbox = ruler.bufferPoint([30.5, 50.5], 0.01);
+     * const bbox = ruler.bufferPoint([30.5, 50.5], 0.01);
      * //=bbox
      */
     bufferPoint(p, buffer) {
@@ -384,7 +420,7 @@ export default class CheapRuler {
      * @param {number} buffer
      * @returns {Array<number>} box object ([w, s, e, n])
      * @example
-     * var bbox = ruler.bufferBBox([30.5, 50.5, 31, 51], 0.2);
+     * const bbox = ruler.bufferBBox([30.5, 50.5, 31, 51], 0.2);
      * //=bbox
      */
     bufferBBox(bbox, buffer) {
@@ -405,7 +441,7 @@ export default class CheapRuler {
      * @param {Array<number>} box object ([w, s, e, n])
      * @returns {boolean}
      * @example
-     * var inside = ruler.insideBBox([30.5, 50.5], [30, 50, 31, 51]);
+     * const inside = ruler.insideBBox([30.5, 50.5], [30, 50, 31, 51]);
      * //=inside
      */
     insideBBox(p, bbox) {

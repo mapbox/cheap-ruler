@@ -12,16 +12,16 @@
     "@rollup/plugin-buble": "^0.21.3",
     "@turf/turf": "^5.1.6",
     "benchmark": "^2.1.4",
-    "eslint": "^6.8.0",
+    "eslint": "^7.0.0",
     "eslint-config-mourner": "^3.0.0",
     "esm": "^3.2.25",
     "node-vincenty": "0.0.6",
     "nyc": "^15.0.1",
-    "rollup": "^2.6.1",
+    "rollup": "^2.10.2",
     "rollup-plugin-terser": "^5.3.0",
-    "tape": "^4.13.2",
-    "ts-node": "^8.8.2",
-    "typescript": "^3.8.3"
+    "tape": "^5.0.0",
+    "ts-node": "^8.10.1",
+    "typescript": "^3.9.2"
   },
   "scripts": {
     "pretest": "eslint index.js bench test/*.js",

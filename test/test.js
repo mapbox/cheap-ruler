@@ -159,6 +159,15 @@ test('pointOnLine over dateline', (t) => {
     t.end();
 });
 
+test('pointToSegmentDistance', (t) => {
+    const p = [-77.034076, 38.882017];
+    const p0 = [-77.031669, 38.878605];
+    const p1 = [-77.029609, 38.881946];
+    const distance = ruler.pointToSegmentDistance(p, p0, p1);
+    t.equal(distance, 0.37461484020420416);
+    t.end();
+});
+
 test('lineSlice', (t) => {
     for (let i = 0; i < lines.length; i++) {
         const line = lines[i];
