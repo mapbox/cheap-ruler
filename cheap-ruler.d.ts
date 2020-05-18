@@ -27,6 +27,7 @@ export default class CheapRuler {
     public lineDistance(points: Points): number;
     public area(polygon: Polygon): number;
     public along(line: Line, dist: number): Point;
+    public pointToSegmentDistance(p: Point, a: Point, b: Point): number;
     public pointOnLine(line: Line, p: Point): {point: Point, index: number, t: number};
     public lineSlice(start: Point, stop: Point, line: Line): Line;
     public lineSliceAlong(start: number, stop: number, line: Line): Line;
