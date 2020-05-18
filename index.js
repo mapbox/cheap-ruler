@@ -1,12 +1,5 @@
 'use strict'; /* @flow */
 
-/**
- * Multipliers for converting between units.
- *
- * @example
- * // convert 50 meters to yards
- * 50 * cheapRuler.units.yards / cheapRuler.units.meters;
- */
 const factors = {
     kilometers: 1,
     miles: 1000 / 1609.344,
@@ -53,6 +46,13 @@ export default class CheapRuler {
         return new CheapRuler(lat, units);
     }
 
+    /**
+     * Multipliers for converting between units.
+     *
+     * @example
+     * // convert 50 meters to yards
+     * 50 * CheapRuler.units.yards / CheapRuler.units.meters;
+     */
     static get units() {
         return factors;
     }

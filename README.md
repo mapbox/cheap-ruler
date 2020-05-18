@@ -174,7 +174,7 @@ Multipliers for converting between units are also exposed in `CheapRuler.units`:
 
 ```js
 // convert 50 meters to yards
-50 * cheapRuler.units.yards / cheapRuler.units.meters;
+50 * CheapRuler.units.yards / CheapRuler.units.meters;
 ```
 
 If you don't specify units when creating a ruler object,
@@ -183,17 +183,17 @@ and input arguments (using division) to any units:
 
 ```js
 // get distance between points in feet
-const distanceInFeet = ruler.distance(a, b) * cheapRuler.units.feet;
+const distanceInFeet = ruler.distance(a, b) * CheapRuler.units.feet;
 
 // make a bbox from a point with a 200 inch buffer
-const box = ruler.bufferPoint(p, 200 / cheapRuler.units.inches);
+const box = ruler.bufferPoint(p, 200 / CheapRuler.units.inches);
 ```
 
 ## Install
 
 - NPM: `npm install cheap-ruler`
-- [Browser build on CDN](https://unpkg.com/cheap-ruler@2.5.1/cheap-ruler.js)
-- [Browser build on CDN (minified)](https://unpkg.com/cheap-ruler@2.5.1/cheap-ruler.min.js)
+- [Browser build on CDN](https://unpkg.com/cheap-ruler@3.0.1/cheap-ruler.js)
+- [Browser build on CDN (minified)](https://unpkg.com/cheap-ruler@3.0.1/cheap-ruler.min.js)
 
 ## Precision
 
