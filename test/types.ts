@@ -1,5 +1,4 @@
-import * as cheapRuler from '../'
-import { Point, Polygon, Line } from '../'
+import CheapRuler, { Point, Line, Polygon } from '../cheap-ruler.js'
 
 /**
  * Declare variables
@@ -18,8 +17,7 @@ const line: Line = [
 /**
  * Test Types
  */
-const units = cheapRuler.units
-const ruler = cheapRuler(35.05, 'miles')
+const ruler = new CheapRuler(35.05, 'miles')
 ruler.distance(point1, point2)
 ruler.bearing(point1, point2)
 ruler.destination(point1, 0.1, 90)
@@ -32,3 +30,16 @@ ruler.lineSliceAlong(10, 20, line)
 ruler.bufferPoint(point1, 0.01)
 ruler.bufferBBox([30.5, 50.5, 31, 51], 0.2)
 ruler.insideBBox([30.5, 50.5], [30, 50, 31, 51])
+
+// units
+CheapRuler.units.kilometers
+CheapRuler.units.miles
+CheapRuler.units.nauticalmiles
+CheapRuler.units.meters
+CheapRuler.units.metres
+CheapRuler.units.yards
+CheapRuler.units.feet
+CheapRuler.units.inches
+
+// ruler
+CheapRuler.fromTile(1567, 12);

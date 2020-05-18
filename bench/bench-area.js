@@ -1,28 +1,28 @@
 'use strict';
 
-var runBench = require('./bench-run.js');
+const runBench = require('./bench-run.js');
 
-var cheapRuler = require('../');
-var turf = require('@turf/turf');
-var lines = require('../test/fixtures/lines.json');
+const CheapRuler = require('../');
+const turf = require('@turf/turf');
+const lines = require('../test/fixtures/lines.json');
 
-var polygons = [];
+const polygons = [];
 
-for (var i = 0; i < lines.length; i++) {
+for (let i = 0; i < lines.length; i++) {
     if (lines[i].length >= 3) {
         polygons.push([lines[i].concat([lines[i][0]])]);
     }
 }
 
 runBench({
-    'turf.area': function () {
-        for (var i = 0; i < polygons.length; i++) {
+    'turf.area'() {
+        for (let i = 0; i < polygons.length; i++) {
             turf.area(turf.polygon(polygons[i]));
         }
     },
-    'ruler.area': function () {
-        var ruler = cheapRuler(32.8351);
-        for (var i = 0; i < polygons.length; i++) {
+    'ruler.area'() {
+        const ruler = new CheapRuler(32.8351);
+        for (let i = 0; i < polygons.length; i++) {
             ruler.area(polygons[i]);
         }
     }

@@ -12,7 +12,7 @@ and usually much less for shorter distances.
 ## Usage
 
 ```js
-var ruler = cheapRuler(35.05, 'miles'); // calculations around latitude 35
+var ruler = new CheapRuler(35.05, 'miles'); // calculations around latitude 35
 ...
 var distance = ruler.distance([30.51, 50.32], [30.52, 50.312]);
 var lineLength = ruler.lineDistance(line.geometry.coordinates);
@@ -26,17 +26,21 @@ Don't create a new ruler for every calculation.
 
 ### Creating a ruler object
 
-#### cheapRuler(latitude[, units])
+#### new CheapRuler(latitude[, units])
 
 Creates a ruler object that will approximate measurements around the given latitude.
 Units are one of: `kilometers` (default), `miles`, `nauticalmiles`, `meters`, `yards`, `feet`, `inches`.
 
-#### cheapRuler.fromTile(y, z[, units])
+```js
+const ruler = new CheapRuler(50.5, 'meters');
+````
+
+#### CheapRuler.fromTile(y, z[, units])
 
 Creates a ruler object from tile coordinates (`y` and `z`).
 
 ```js
-var ruler = cheapRuler.fromTile(1567, 12);
+const ruler = CheapRuler.fromTile(1567, 12);
 ```
 
 ### Ruler methods
@@ -46,7 +50,7 @@ var ruler = cheapRuler.fromTile(1567, 12);
 Given two points of the form `[longitude, latitude]`, returns the distance.
 
 ```js
-var distance = ruler.distance([30.5, 50.5], [30.51, 50.49]);
+const distance = ruler.distance([30.5, 50.5], [30.51, 50.49]);
 ```
 
 #### bearing(a, b)
@@ -54,7 +58,7 @@ var distance = ruler.distance([30.5, 50.5], [30.51, 50.49]);
 Returns the bearing between two points in angles.
 
 ```js
-var bearing = ruler.bearing([30.5, 50.5], [30.51, 50.49]);
+const bearing = ruler.bearing([30.5, 50.5], [30.51, 50.49]);
 ```
 
 #### destination(p, dist, bearing)
@@ -62,7 +66,7 @@ var bearing = ruler.bearing([30.5, 50.5], [30.51, 50.49]);
 Returns a new point given distance and bearing from the starting point.
 
 ```js
-var point = ruler.destination([30.5, 50.5], 0.1, 90);
+const point = ruler.destination([30.5, 50.5], 0.1, 90);
 ```
 
 #### offset(p, dx, dy)
@@ -70,7 +74,7 @@ var point = ruler.destination([30.5, 50.5], 0.1, 90);
 Returns a new point given easting and northing offsets from the starting point.
 
 ```js
-var point = ruler.offset([30.5, 50.5], 10, 5); // 10km east and 5km north
+const point = ruler.offset([30.5, 50.5], 10, 5); // 10km east and 5km north
 ```
 
 #### lineDistance(line)
@@ -78,7 +82,7 @@ var point = ruler.offset([30.5, 50.5], 10, 5); // 10km east and 5km north
 Given a line (an array of points), returns the total line distance.
 
 ```js
-var length = ruler.lineDistance([
+const length = ruler.lineDistance([
     [-67.031, 50.458], [-67.031, 50.534],
     [-66.929, 50.534], [-66.929, 50.458]
 ]);
@@ -91,7 +95,7 @@ Note that it returns the value in the specified units
 (square kilometers by default) rather than square meters as in `turf.area`.
 
 ```js
-var area = ruler.area([[
+const area = ruler.area([[
     [-67.031, 50.458], [-67.031, 50.534], [-66.929, 50.534],
     [-66.929, 50.458], [-67.031, 50.458]
 ]]);
@@ -102,7 +106,7 @@ var area = ruler.area([[
 Returns the point at a specified distance along the line.
 
 ```js
-var point = ruler.along(line, 2.5);
+const point = ruler.along(line, 2.5);
 ```
 
 #### pointOnLine(line, p)
@@ -112,7 +116,7 @@ Returns an object of the form `{point, index, t}`, where `point` is closest poin
 where the closest point is on that segment.
 
 ```js
-var point = ruler.pointOnLine(line, [-67.04, 50.5]).point;
+const point = ruler.pointOnLine(line, [-67.04, 50.5]).point;
 ```
 
 #### lineSlice(start, stop, line)
@@ -120,7 +124,7 @@ var point = ruler.pointOnLine(line, [-67.04, 50.5]).point;
 Returns a part of the given line between the start and the stop points (or their closest points on the line).
 
 ```js
-ruler.lineSlice([-67.04, 50.5], [-67.05, 50.56], line);
+const part = ruler.lineSlice([-67.04, 50.5], [-67.05, 50.56], line);
 ```
 
 #### lineSliceAlong(startDist, stopDist, line)
@@ -128,7 +132,7 @@ ruler.lineSlice([-67.04, 50.5], [-67.05, 50.56], line);
 Returns a part of the given line between the start and the stop points indicated by distance along the line.
 
 ```js
-ruler.lineSliceAlong(10, 20, line);
+const part = ruler.lineSliceAlong(10, 20, line);
 ```
 
 #### bufferPoint(p, buffer)
@@ -136,7 +140,7 @@ ruler.lineSliceAlong(10, 20, line);
 Given a point, returns a bounding box object (`[w, s, e, n]`) created from the given point buffered by a given distance.
 
 ```js
-var bbox = ruler.bufferPoint([30.5, 50.5], 0.01);
+const bbox = ruler.bufferPoint([30.5, 50.5], 0.01);
 ```
 
 #### bufferBBox(bbox, buffer)
@@ -144,7 +148,7 @@ var bbox = ruler.bufferPoint([30.5, 50.5], 0.01);
 Given a bounding box, returns the box buffered by a given distance.
 
 ```js
-var bbox = ruler.bufferBBox([30.5, 50.5, 31, 51], 0.2);
+const bbox = ruler.bufferBBox([30.5, 50.5, 31, 51], 0.2);
 ```
 
 #### insideBBox(p, bbox)
@@ -152,12 +156,12 @@ var bbox = ruler.bufferBBox([30.5, 50.5, 31, 51], 0.2);
 Returns true if the given point is inside in the given bounding box, otherwise false.
 
 ```js
-var inside = ruler.insideBBox([30.5, 50.5], [30, 50, 31, 51]);
+const inside = ruler.insideBBox([30.5, 50.5], [30, 50, 31, 51]);
 ```
 
 ### Units conversion
 
-Multipliers for converting between units are also exposed in `cheapRuler.units`:
+Multipliers for converting between units are also exposed in `CheapRuler.units`:
 
 ```js
 // convert 50 meters to yards
@@ -170,10 +174,10 @@ and input arguments (using division) to any units:
 
 ```js
 // get distance between points in feet
-var distanceInFeet = ruler.distance(a, b) * cheapRuler.units.feet;
+const distanceInFeet = ruler.distance(a, b) * cheapRuler.units.feet;
 
 // make a bbox from a point with a 200 inch buffer
-var box = ruler.bufferPoint(p, 200 / cheapRuler.units.inches);
+const box = ruler.bufferPoint(p, 200 / cheapRuler.units.inches);
 ```
 
 ## Install
