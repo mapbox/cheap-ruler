@@ -33,9 +33,10 @@
     "cov": "nyc tape test/test.js"
   },
   "files": [
-    "index.d.ts",
+    "index.js",
     "cheap-ruler.js",
-    "cheap-ruler.min.js"
+    "cheap-ruler.min.js",
+    "cheap-ruler.d.ts"
   ],
   "eslintConfig": {
     "extends": "mourner"
