@@ -107,7 +107,7 @@ Returns the distance from a point `p` to a line segment `a` to `b`.
 
 ```js
 const distance = ruler.pointToSegmentDistance([-77.034076, 38.882017],
-    [-77.031669, 38.878605] [-77.029609, 38.881946]);
+    [-77.031669, 38.878605], [-77.029609, 38.881946]);
 ````
 
 #### along(line, dist)
