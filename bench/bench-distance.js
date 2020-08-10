@@ -20,11 +20,11 @@ runBench({
     },
     'new ruler for every point'() {
         for (let i = 0; i < lines.length; i++) {
-            var sum = 0; // eslint-disable-line
+            let sum = 0;
             for (let j = 0; j < lines[i].length - 1; j++) {
                 const p1 = lines[i][j];
                 const p2 = lines[i][j + 1];
-                sum += new CheapRuler((p1[1] + p2[1]) / 2).distance(p1, p2);
+                sum += new CheapRuler((p1[1] + p2[1]) / 2).distance(p1, p2); // eslint-disable-line
             }
         }
     }
