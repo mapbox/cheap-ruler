@@ -3,5 +3,5 @@ coverage
 .nyc_output
 *.log
 cheap-ruler.js
-cheap-ruler.min.js
 test/types.js
+pnpm-lock.yaml

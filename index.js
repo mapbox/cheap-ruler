@@ -1,4 +1,3 @@
-'use strict'; /* @flow */
 
 const factors = {
     kilometers: 1,

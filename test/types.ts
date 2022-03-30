@@ -1,4 +1,4 @@
-import CheapRuler, { Point, Line, Polygon } from '../cheap-ruler.js'
+import CheapRuler, { Point, Line, Polygon } from '../index.js'
 
 /**
  * Declare variables

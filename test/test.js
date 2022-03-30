@@ -1,7 +1,9 @@
 import {test} from 'tape';
 import CheapRuler from '../index.js';
 import * as turf from '@turf/turf';
-import lines from './fixtures/lines.json';
+import {readFileSync} from 'fs';
+
+const lines = JSON.parse(readFileSync(new URL('fixtures/lines.json', import.meta.url)));
 
 const points = Array.prototype.concat.apply([], lines);
 
