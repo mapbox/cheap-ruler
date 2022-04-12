@@ -1,4 +1,4 @@
-export type BBox = [number, number, number, number];
+export type BBox = [west: number, south: number, east: number, north: number];
 export type Point = [longitude: number, latitude: number];
 export type Line = Point[];
 export type Points = Point[];
