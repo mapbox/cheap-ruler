@@ -1,25 +1,28 @@
-export type BBox = [number, number, number, number];
-export type Point = [number, number];
+export type BBox = [west: number, south: number, east: number, north: number];
+export type Point = [longitude: number, latitude: number];
 export type Line = Point[];
 export type Points = Point[];
 export type Polygon = Point[][];
 
-export interface Factors {
-    kilometers: number;
-    miles: number;
-    nauticalmiles: number;
-    meters: number;
-    metres: number;
-    yards: number;
-    feet: number;
-    inches: number;
+export type Unit =
+    'kilometers' |
+    'miles' |
+    'nauticalmiles' |
+    'meters' |
+    'metres' |
+    'yards' |
+    'feet' |
+    'inches'
+
+export type Factors = {
+    [name in Unit]: number;
 }
 
 export default class CheapRuler {
-    public static fromTile(y: number, z: number, units?: string): CheapRuler;
+    public static fromTile(y: number, z: number, units?: Unit): CheapRuler;
     public static units: Factors;
 
-    constructor(lat: number, units?: string);
+    constructor(lat: number, units?: Unit);
 
     public distance(a: Point, b: Point): number;
     public bearing(a: Point, b: Point): number;
