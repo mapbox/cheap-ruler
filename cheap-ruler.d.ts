@@ -1,5 +1,5 @@
 export type BBox = [number, number, number, number];
-export type Point = [number, number];
+export type Point = [longitude: number, latitude: number];
 export type Line = Point[];
 export type Points = Point[];
 export type Polygon = Point[][];
