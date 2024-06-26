@@ -1,4 +1,4 @@
-# cheap-ruler [![](https://img.shields.io/badge/simply-awesome-brightgreen.svg)](https://github.com/mourner/projects)
+# cheap-ruler [![Node](https://github.com/mapbox/cheap-ruler/actions/workflows/node.yml/badge.svg)](https://github.com/mapbox/cheap-ruler/actions/workflows/node.yml) [![](https://img.shields.io/badge/simply-awesome-brightgreen.svg)](https://github.com/mourner/projects)
 
 A collection of very fast approximations to common geodesic measurements.
 Useful for performance-sensitive code that measures things on a city scale. Can be an order of magnitude faster than corresponding [Turf](http://turfjs.org/) methods.
@@ -192,8 +192,8 @@ const box = ruler.bufferPoint(p, 200 / CheapRuler.units.inches);
 ## Install
 
 - NPM: `npm install cheap-ruler`
-- [Browser build on CDN](https://unpkg.com/cheap-ruler@3.0.1/cheap-ruler.js)
-- [Browser build on CDN (minified)](https://unpkg.com/cheap-ruler@3.0.1/cheap-ruler.min.js)
+- [Browser build on CDN (ESM)](https://esm.run/cheap-ruler)
+- [Browser build on CDN (UMD)](https://cdn.jsdelivr.net/npm/cheap-ruler/cheap-ruler.js)
 
 ## Precision
 
