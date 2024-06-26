@@ -8,22 +8,19 @@
   "main": "cheap-ruler.js",
   "exports": "./index.js",
   "module": "index.js",
-  "types": "cheap-ruler.d.ts",
+  "types": "index.d.ts",
   "devDependencies": {
     "@turf/turf": "^7.0.0",
-    "@types/node": "^20.14.9",
     "benchmark": "^2.1.4",
     "eslint": "^9.5.0",
     "eslint-config-mourner": "^4.0.0",
     "node-vincenty": "0.0.6",
     "rollup": "^4.18.0",
-    "ts-node": "^10.9.2",
     "typescript": "^5.5.2"
   },
   "scripts": {
     "pretest": "eslint index.js bench test/*.js",
-    "test": "node --test test/test.js",
-    "types": "node  --no-warnings=ExperimentalWarning --loader ts-node/esm test/types.ts",
+    "test": "tsc && node --test test/test.js",
     "build": "rollup index.js -o cheap-ruler.js -n CheapRuler -f umd",
     "prepublishOnly": "npm test && npm run build",
     "cov": "node --test --experimental-test-coverage test/test.js"

@@ -1,9 +1,15 @@
 {
   "compilerOptions": {
-    "target": "es5",
-    "module": "es6",
+    "allowJs": true,
+    "checkJs": true,
     "strict": true,
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true
-  }
+    "emitDeclarationOnly": true,
+    "declaration": true,
+    "target": "es2020",
+    "module": "nodenext",
+    "moduleResolution": "nodenext"
+  },
+  "files": [
+    "index.js"
+  ]
 }
