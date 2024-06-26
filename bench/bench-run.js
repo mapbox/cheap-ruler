@@ -1,8 +1,7 @@
-'use strict';
 
-const Benchmark = require('benchmark');
+import Benchmark from 'benchmark';
 
-module.exports = function (config) {
+export default function benchRun(config) {
     const suite = new Benchmark.Suite();
 
     for (const name in config) {

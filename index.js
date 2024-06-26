@@ -237,10 +237,9 @@ export default class CheapRuler {
         let [x, y] = a;
         let dx = wrap(b[0] - x) * this.kx;
         let dy = (b[1] - y) * this.ky;
-        let t = 0;
 
         if (dx !== 0 || dy !== 0) {
-            t = (wrap(p[0] - x) * this.kx * dx + (p[1] - y) * this.ky * dy) / (dx * dx + dy * dy);
+            const t = (wrap(p[0] - x) * this.kx * dx + (p[1] - y) * this.ky * dy) / (dx * dx + dy * dy);
 
             if (t > 1) {
                 x = b[0];
@@ -443,7 +442,7 @@ export default class CheapRuler {
      * const inside = ruler.insideBBox([30.5, 50.5], [30, 50, 31, 51]);
      * //=inside
      */
-    insideBBox(p, bbox) {
+    insideBBox(p, bbox) { // eslint-disable-line
         return wrap(p[0] - bbox[0]) >= 0 &&
                wrap(p[0] - bbox[2]) <= 0 &&
                p[1] >= bbox[1] &&

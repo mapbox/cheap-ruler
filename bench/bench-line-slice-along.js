@@ -1,10 +1,9 @@
-'use strict';
+import runBench from './bench-run.js';
+import CheapRuler from '../index.js';
+import * as turf from '@turf/turf';
+import {readFileSync} from 'fs';
 
-const runBench = require('./bench-run.js');
-
-const CheapRuler = require('../');
-const turf = require('@turf/turf');
-const lines = require('../test/fixtures/lines.json');
+const lines = JSON.parse(readFileSync(new URL('../test/fixtures/lines.json', import.meta.url)));
 
 const ruler = new CheapRuler(32.8351);
 const distances = lines.map(line => ruler.lineDistance(line));
