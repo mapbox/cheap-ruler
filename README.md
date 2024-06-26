@@ -1,4 +1,4 @@
-# cheap-ruler [![Build Status](https://travis-ci.org/mapbox/cheap-ruler.svg?branch=master)](https://travis-ci.org/mapbox/cheap-ruler) [![](https://img.shields.io/badge/simply-awesome-brightgreen.svg)](https://github.com/mourner/projects)
+# cheap-ruler [![](https://img.shields.io/badge/simply-awesome-brightgreen.svg)](https://github.com/mourner/projects)
 
 A collection of very fast approximations to common geodesic measurements.
 Useful for performance-sensitive code that measures things on a city scale. Can be an order of magnitude faster than corresponding [Turf](http://turfjs.org/) methods.
