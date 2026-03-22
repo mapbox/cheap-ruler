@@ -437,7 +437,7 @@ export default class CheapRuler {
      * const inside = ruler.insideBBox([30.5, 50.5], [30, 50, 31, 51]);
      * //=inside
      */
-    insideBBox(p, bbox) { // eslint-disable-line
+    insideBBox(p, bbox) {
         return wrap(p[0] - bbox[0]) >= 0 &&
                wrap(p[0] - bbox[2]) <= 0 &&
                p[1] >= bbox[1] &&
