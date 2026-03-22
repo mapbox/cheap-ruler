@@ -12,11 +12,11 @@ and usually much less for shorter distances.
 ## Usage
 
 ```js
-var ruler = new CheapRuler(35.05, 'miles'); // calculations around latitude 35
-...
-var distance = ruler.distance([30.51, 50.32], [30.52, 50.312]);
-var lineLength = ruler.lineDistance(line.geometry.coordinates);
-var bbox = ruler.bufferPoint([30.5, 50.5], 0.01);
+const ruler = new CheapRuler(35.05, 'miles'); // calculations around latitude 35
+// ...
+const distance = ruler.distance([30.51, 50.32], [30.52, 50.312]);
+const lineLength = ruler.lineDistance(line.geometry.coordinates);
+const bbox = ruler.bufferPoint([30.5, 50.5], 0.01);
 ```
 
 **Note**: to get the full performance benefit,
@@ -29,7 +29,7 @@ Don't create a new ruler for every calculation.
 #### new CheapRuler(latitude[, units])
 
 Creates a ruler object that will approximate measurements around the given latitude.
-Units are one of: `kilometers` (default), `miles`, `nauticalmiles`, `meters`, `yards`, `feet`, `inches`.
+Units are one of: `kilometers` (default), `miles`, `nauticalmiles`, `meters`, `metres`, `yards`, `feet`, `inches`.
 
 ```js
 const ruler = new CheapRuler(50.5, 'meters');
