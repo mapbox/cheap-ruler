@@ -53,7 +53,7 @@ export default class CheapRuler {
      * Creates a ruler instance for very fast approximations to common geodesic measurements around a certain latitude.
      *
      * @param {number} lat latitude
-     * @param {keyof typeof factors} [units='kilometers']
+     * @param {keyof typeof factors} [units='kilometers'] one of: kilometers, miles, nauticalmiles, meters, metres, yards, feet, inches
      * @example
      * const ruler = cheapRuler(35.05, 'miles');
      * //=ruler
@@ -216,7 +216,6 @@ export default class CheapRuler {
     /**
      * Returns the distance from a point `p` to a line segment `a` to `b`.
      *
-     * @pointToSegmentDistance
      * @param {[number, number]} p point [longitude, latitude]
      * @param {[number, number]} a segment point 1 [longitude, latitude]
      * @param {[number, number]} b segment point 2 [longitude, latitude]
@@ -350,6 +349,7 @@ export default class CheapRuler {
 
     /**
      * Returns a part of the given line between the start and the stop points indicated by distance along the line.
+     * Returns an empty array if start is beyond the total line length.
      *
      * @param {number} start start distance
      * @param {number} stop stop distance
