@@ -289,20 +289,23 @@ export default class CheapRuler {
         let minI = 0;
         let minT = 0;
 
+        let next = line[0];
         for (let i = 0; i < line.length - 1; i++) {
 
-            let x = line[i][0];
-            let y = line[i][1];
-            let dx = wrap(line[i + 1][0] - x) * this.kx;
-            let dy = (line[i + 1][1] - y) * this.ky;
+            const a = next;
+            next = line[i + 1];
+            let x = a[0];
+            let y = a[1];
+            let dx = wrap(next[0] - x) * this.kx;
+            let dy = (next[1] - y) * this.ky;
             let t = 0;
 
             if (dx !== 0 || dy !== 0) {
                 t = (wrap(p[0] - x) * this.kx * dx + (p[1] - y) * this.ky * dy) / (dx * dx + dy * dy);
 
                 if (t > 1) {
-                    x = line[i + 1][0];
-                    y = line[i + 1][1];
+                    x = next[0];
+                    y = next[1];
 
                 } else if (t > 0) {
                     x += (dx / this.kx) * t;
