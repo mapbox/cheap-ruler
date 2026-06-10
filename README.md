@@ -6,7 +6,7 @@ Useful for performance-sensitive code that measures things on a city scale. Can 
 The approximations are based on the [WGS84 ellipsoid model of the Earth](https://en.wikipedia.org/wiki/Earth_radius#Meridional), projecting coordinates to a flat surface that approximates the ellipsoid around a certain latitude.
 For distances under 500 kilometers and not on the poles,
 the results are very precise — within [0.1% margin of error](#precision)
-compared to [Vincenti formulas](https://en.wikipedia.org/wiki/Vincenty%27s_formulae),
+compared to [Vincenty's formulae](https://en.wikipedia.org/wiki/Vincenty%27s_formulae),
 and usually much less for shorter distances.
 
 ## Usage
@@ -33,7 +33,7 @@ Units are one of: `kilometers` (default), `miles`, `nauticalmiles`, `meters`, `m
 
 ```js
 const ruler = new CheapRuler(50.5, 'meters');
-````
+```
 
 #### CheapRuler.fromTile(y, z[, units])
 
@@ -108,7 +108,7 @@ Returns the distance from a point `p` to a line segment `a` to `b`.
 ```js
 const distance = ruler.pointToSegmentDistance([-77.034076, 38.882017],
     [-77.031669, 38.878605], [-77.029609, 38.881946]);
-````
+```
 
 #### along(line, dist)
 

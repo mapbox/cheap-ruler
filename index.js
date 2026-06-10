@@ -33,7 +33,7 @@ export default class CheapRuler {
      * //=ruler
      */
     static fromTile(y, z, units) {
-        const n = Math.PI * (1 - 2 * (y + 0.5) / Math.pow(2, z));
+        const n = Math.PI * (1 - 2 * (y + 0.5) / (2 ** z));
         const lat = Math.atan(0.5 * (Math.exp(n) - Math.exp(-n))) / RAD;
         return new CheapRuler(lat, units);
     }
@@ -58,12 +58,13 @@ export default class CheapRuler {
      * const ruler = cheapRuler(35.05, 'miles');
      * //=ruler
      */
-    constructor(lat, units) {
+    constructor(lat, units = 'kilometers') {
         if (lat === undefined) throw new Error('No latitude given.');
-        if (units && !factors[units]) throw new Error(`Unknown unit ${  units  }. Use one of: ${  Object.keys(factors).join(', ')}`);
+        const factor = factors[units];
+        if (!factor) throw new Error(`Unknown unit ${units}. Use one of: ${Object.keys(factors).join(', ')}`);
 
         // Curvature formulas from https://en.wikipedia.org/wiki/Earth_radius#Meridional
-        const m = RAD * RE * (units ? factors[units] : 1);
+        const m = RAD * RE * factor;
         const coslat = Math.cos(lat * RAD);
         const w2 = 1 / (1 - E2 * (1 - coslat * coslat));
         const w = Math.sqrt(w2);
@@ -473,7 +474,5 @@ function interpolate(a, b, t) {
  * @param {number} deg
  */
 function wrap(deg) {
-    while (deg < -180) deg += 360;
-    while (deg > 180) deg -= 360;
-    return deg;
+    return deg - Math.round(deg / 360) * 360;
 }
