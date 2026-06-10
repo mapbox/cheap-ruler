@@ -10,13 +10,13 @@
   "module": "index.js",
   "types": "index.d.ts",
   "devDependencies": {
-    "@turf/turf": "^7.3.4",
+    "@turf/turf": "^7.3.5",
     "benchmark": "^2.1.4",
-    "eslint": "^10.1.0",
-    "eslint-config-mourner": "^4.1.0",
+    "eslint": "^10.4.1",
+    "eslint-config-mourner": "^5.0.1",
     "node-vincenty": "0.0.6",
-    "rollup": "^4.60.0",
-    "typescript": "^5.9.3"
+    "rollup": "^4.61.1",
+    "typescript": "^6.0.3"
   },
   "scripts": {
     "pretest": "eslint index.js bench test/*.js",
@@ -39,5 +39,8 @@
     "measurement",
     "approximation",
     "distance"
-  ]
+  ],
+  "allowScripts": {
+    "fsevents@2.3.3": true
+  }
 }
