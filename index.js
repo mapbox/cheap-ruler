@@ -155,7 +155,6 @@ export default class CheapRuler {
      * //=length
      */
     lineDistance(points) {
-        const {kx, ky} = this;
         let total = 0;
         let ax = points[0][0];
         let ay = points[0][1];
@@ -163,8 +162,8 @@ export default class CheapRuler {
             const b = points[i];
             const bx = b[0];
             const by = b[1];
-            const dx = wrap(ax - bx) * kx;
-            const dy = (ay - by) * ky;
+            const dx = wrap(ax - bx) * this.kx;
+            const dy = (ay - by) * this.ky;
             total += Math.sqrt(dx * dx + dy * dy);
             ax = bx;
             ay = by;
@@ -209,7 +208,6 @@ export default class CheapRuler {
      * //=point
      */
     along(line, dist) {
-        const {kx, ky} = this;
         let sum = 0;
 
         if (dist <= 0) return line[0];
@@ -221,8 +219,8 @@ export default class CheapRuler {
             const p1 = line[i];
             const bx = p1[0];
             const by = p1[1];
-            const dx = wrap(ax - bx) * kx;
-            const dy = (ay - by) * ky;
+            const dx = wrap(ax - bx) * this.kx;
+            const dy = (ay - by) * this.ky;
             const d = Math.sqrt(dx * dx + dy * dy);
             sum += d;
             if (sum > dist) return interpolate(p0, p1, (dist - (sum - d)) / d);
@@ -386,7 +384,6 @@ export default class CheapRuler {
      * //=line2
      */
     lineSliceAlong(start, stop, line) {
-        const {kx, ky} = this;
         let sum = 0;
         const slice = [];
 
@@ -397,8 +394,8 @@ export default class CheapRuler {
             const p1 = line[i];
             const bx = p1[0];
             const by = p1[1];
-            const dx = wrap(ax - bx) * kx;
-            const dy = (ay - by) * ky;
+            const dx = wrap(ax - bx) * this.kx;
+            const dy = (ay - by) * this.ky;
             const d = Math.sqrt(dx * dx + dy * dy);
 
             sum += d;
