@@ -8,8 +8,9 @@ const points = [].concat(...lines);
 
 runBench({
     'turf.destination'() {
+        const options = {units: 'kilometers'};
         for (let i = 0; i < points.length; i++) {
-            turf.destination(turf.point(points[i]), 1, (i % 360) - 180, 'kilometers');
+            turf.destination(turf.point(points[i]), 1, (i % 360) - 180, options);
         }
     },
     'ruler.destination'() {

@@ -6,9 +6,9 @@ import {readFileSync} from 'fs';
 const lines = JSON.parse(readFileSync(new URL('../test/fixtures/lines.json', import.meta.url)));
 
 runBench({
-    'turf.lineDistance'() {
+    'turf.length'() {
         for (let i = 0; i < lines.length; i++) {
-            turf.lineDistance(turf.lineString(lines[i]));
+            turf.length(turf.lineString(lines[i]));
         }
     },
     'ruler.lineDistance'() {

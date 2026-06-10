@@ -8,9 +8,9 @@ const lines = JSON.parse(readFileSync(new URL('../test/fixtures/lines.json', imp
 const p = [-96.9159, 32.8351];
 
 runBench({
-    'turf.pointOnLine'() {
+    'turf.nearestPointOnLine'() {
         for (let i = 0; i < lines.length; i++) {
-            turf.pointOnLine(turf.lineString(lines[i]), turf.point(p));
+            turf.nearestPointOnLine(turf.lineString(lines[i]), turf.point(p));
         }
     },
     'ruler.pointOnLine'() {

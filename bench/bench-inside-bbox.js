@@ -10,9 +10,9 @@ const ruler = new CheapRuler(32.8351);
 const bboxes = points.map(p => ruler.bufferPoint(p, 0.1));
 
 runBench({
-    'turf.inside + turf.bboxPolygon'() {
+    'turf.booleanPointInPolygon + turf.bboxPolygon'() {
         for (let i = 0; i < points.length; i++) {
-            turf.inside(turf.point(points[i]), turf.bboxPolygon(bboxes[i]));
+            turf.booleanPointInPolygon(turf.point(points[i]), turf.bboxPolygon(bboxes[i]));
         }
     },
     'ruler.insideBBox'() {
