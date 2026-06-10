@@ -132,9 +132,11 @@ test('along over dateline', () => {
 test('pointOnLine', () => {
     // not Turf comparison because pointOnLine is bugged https://github.com/Turfjs/turf/issues/344
     const line = [[-77.031669, 38.878605], [-77.029609, 38.881946]];
-    const result = ruler.pointOnLine(line, [-77.034076, 38.882017]);
+    const p = [-77.034076, 38.882017];
+    const result = ruler.pointOnLine(line, p);
 
-    assert.deepEqual(result, {point: [-77.03052689033436, 38.880457324462576], index: 0, t: 0.5544221677861756}, 'pointOnLine');
+    assert.deepEqual(result, {point: [-77.03052689033436, 38.880457324462576], index: 0, t: 0.5544221677861756, dist: 0.37461484020420416}, 'pointOnLine');
+    assert.equal(result.dist, ruler.distance(p, result.point), 'dist matches distance to closest point');
 
     assert.equal(ruler.pointOnLine(line, [-80, 38]).t, 0, 't is not less than 0');
     assert.equal(ruler.pointOnLine(line, [-75, 38]).t, 1, 't is not bigger than 1');

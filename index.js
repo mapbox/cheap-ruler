@@ -250,13 +250,14 @@ export default class CheapRuler {
     }
 
     /**
-     * Returns an object of the form {point, index, t}, where point is closest point on the line
+     * Returns an object of the form {point, index, t, dist}, where point is closest point on the line
      * from the given point, index is the start index of the segment with the closest point,
-     * and t is a parameter from 0 to 1 that indicates where the closest point is on that segment.
+     * t is a parameter from 0 to 1 that indicates where the closest point is on that segment,
+     * and dist is the distance from the point to the line.
      *
      * @param {readonly [number, number][]} line
      * @param {readonly [number, number]} p point [longitude, latitude]
-     * @returns {{point: [number, number], index: number, t: number}} {point, index, t}
+     * @returns {{point: [number, number], index: number, t: number, dist: number}} {point, index, t, dist}
      * @example
      * const point = ruler.pointOnLine(line, [-67.04, 50.5]).point;
      * //=point
@@ -305,7 +306,8 @@ export default class CheapRuler {
         return {
             point: [minX, minY],
             index: minI,
-            t: Math.max(0, Math.min(1, minT))
+            t: Math.max(0, Math.min(1, minT)),
+            dist: Math.sqrt(minDist)
         };
     }
 
