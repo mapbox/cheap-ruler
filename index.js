@@ -155,9 +155,19 @@ export default class CheapRuler {
      * //=length
      */
     lineDistance(points) {
+        const {kx, ky} = this;
         let total = 0;
-        for (let i = 0; i < points.length - 1; i++) {
-            total += this.distance(points[i], points[i + 1]);
+        let ax = points[0][0];
+        let ay = points[0][1];
+        for (let i = 1; i < points.length; i++) {
+            const b = points[i];
+            const bx = b[0];
+            const by = b[1];
+            const dx = wrap(ax - bx) * kx;
+            const dy = (ay - by) * ky;
+            total += Math.sqrt(dx * dx + dy * dy);
+            ax = bx;
+            ay = by;
         }
         return total;
     }
@@ -199,16 +209,26 @@ export default class CheapRuler {
      * //=point
      */
     along(line, dist) {
+        const {kx, ky} = this;
         let sum = 0;
 
         if (dist <= 0) return line[0];
 
-        for (let i = 0; i < line.length - 1; i++) {
-            const p0 = line[i];
-            const p1 = line[i + 1];
-            const d = this.distance(p0, p1);
+        let p0 = line[0];
+        let ax = p0[0];
+        let ay = p0[1];
+        for (let i = 1; i < line.length; i++) {
+            const p1 = line[i];
+            const bx = p1[0];
+            const by = p1[1];
+            const dx = wrap(ax - bx) * kx;
+            const dy = (ay - by) * ky;
+            const d = Math.sqrt(dx * dx + dy * dy);
             sum += d;
             if (sum > dist) return interpolate(p0, p1, (dist - (sum - d)) / d);
+            p0 = p1;
+            ax = bx;
+            ay = by;
         }
 
         return line[line.length - 1];
@@ -363,13 +383,20 @@ export default class CheapRuler {
      * //=line2
      */
     lineSliceAlong(start, stop, line) {
+        const {kx, ky} = this;
         let sum = 0;
         const slice = [];
 
-        for (let i = 0; i < line.length - 1; i++) {
-            const p0 = line[i];
-            const p1 = line[i + 1];
-            const d = this.distance(p0, p1);
+        let p0 = line[0];
+        let ax = p0[0];
+        let ay = p0[1];
+        for (let i = 1; i < line.length; i++) {
+            const p1 = line[i];
+            const bx = p1[0];
+            const by = p1[1];
+            const dx = wrap(ax - bx) * kx;
+            const dy = (ay - by) * ky;
+            const d = Math.sqrt(dx * dx + dy * dy);
 
             sum += d;
 
@@ -383,6 +410,10 @@ export default class CheapRuler {
             }
 
             if (sum > start) slice.push(p1);
+
+            p0 = p1;
+            ax = bx;
+            ay = by;
         }
 
         return slice;
