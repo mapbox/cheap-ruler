@@ -189,9 +189,11 @@ export default class CheapRuler {
         for (let i = 0; i < polygon.length; i++) {
             const ring = polygon[i];
 
+            let ringSum = 0;
             for (let j = 0, len = ring.length, k = len - 1; j < len; k = j++) {
-                sum += wrap(ring[j][0] - ring[k][0]) * (ring[j][1] + ring[k][1]) * (i ? -1 : 1);
+                ringSum += wrap(ring[j][0] - ring[k][0]) * (ring[j][1] + ring[k][1]);
             }
+            sum += Math.abs(ringSum) * (i ? -1 : 1);
         }
 
         return (Math.abs(sum) / 2) * this.kx * this.ky;
