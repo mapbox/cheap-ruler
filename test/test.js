@@ -99,6 +99,17 @@ test('area', () => {
     // area within 0.3%
 });
 
+test('area with a hole', () => {
+    const holeRuler = new CheapRuler(50.5);
+    const outer = [[-67.031, 50.458], [-66.929, 50.458], [-66.929, 50.534], [-67.031, 50.534], [-67.031, 50.458]];
+    const hole = [[-67.0, 50.48], [-67.0, 50.51], [-66.96, 50.51], [-66.96, 50.48], [-67.0, 50.48]];
+    const poly = [outer, hole];
+    const expected = turf.area(turf.polygon(poly)) / 1e6;
+    const actual = holeRuler.area(poly);
+    assertErr(expected, actual, 0.005, 'area with a hole');
+    // area with a hole within 0.5%
+});
+
 test('along', () => {
     for (let i = 0; i < lines.length; i++) {
         const line = turf.lineString(lines[i]);
