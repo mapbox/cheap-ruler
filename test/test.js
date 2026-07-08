@@ -203,6 +203,13 @@ test('lineSliceAlong', () => {
     // lineSliceAlong length within 1e-5
 });
 
+test('lineSliceAlong with negative start', () => {
+    const line = lines[0];
+    const dist = ruler.lineDistance(line);
+    const slice = ruler.lineSliceAlong(-1, dist * 0.5, line);
+    assert.deepEqual(slice[0], line[0], 'starts at the beginning of the line');
+});
+
 test('lineSlice reverse', () => {
     const line = lines[0];
     const dist = ruler.lineDistance(line);
