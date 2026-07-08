@@ -389,6 +389,8 @@ export default class CheapRuler {
         let sum = 0;
         const slice = [];
 
+        if (start < 0) start = 0;
+
         let p0 = line[0];
         let ax = p0[0];
         let ay = p0[1];
