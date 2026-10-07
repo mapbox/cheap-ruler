@@ -12,6 +12,8 @@ and usually much less for shorter distances.
 ## Usage
 
 ```js
+import CheapRuler from 'cheap-ruler';
+
 const ruler = new CheapRuler(35.05, 'miles'); // calculations around latitude 35
 // ...
 const distance = ruler.distance([30.51, 50.32], [30.52, 50.312]);
@@ -162,7 +164,7 @@ const bbox = ruler.bufferBBox([30.5, 50.5, 31, 51], 0.2);
 
 #### insideBBox(p, bbox)
 
-Returns true if the given point is inside in the given bounding box, otherwise false.
+Returns true if the given point is inside the given bounding box, otherwise false.
 
 ```js
 const inside = ruler.insideBBox([30.5, 50.5], [30, 50, 31, 51]);

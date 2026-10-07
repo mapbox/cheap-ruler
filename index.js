@@ -1,4 +1,3 @@
-
 const factors = {
     kilometers: 1,
     miles: 1000 / 1609.344,
@@ -29,12 +28,12 @@ export default class CheapRuler {
      * @param {keyof typeof factors} [units='kilometers']
      * @returns {CheapRuler}
      * @example
-     * const ruler = cheapRuler.fromTile(1567, 12);
+     * const ruler = CheapRuler.fromTile(1567, 12);
      * //=ruler
      */
     static fromTile(y, z, units) {
         const n = Math.PI * (1 - 2 * (y + 0.5) / (2 ** z));
-        const lat = Math.atan(0.5 * (Math.exp(n) - Math.exp(-n))) / RAD;
+        const lat = Math.atan(Math.sinh(n)) / RAD;
         return new CheapRuler(lat, units);
     }
 
@@ -55,23 +54,22 @@ export default class CheapRuler {
      * @param {number} lat latitude
      * @param {keyof typeof factors} [units='kilometers'] one of: kilometers, miles, nauticalmiles, meters, metres, yards, feet, inches
      * @example
-     * const ruler = cheapRuler(35.05, 'miles');
+     * const ruler = new CheapRuler(35.05, 'miles');
      * //=ruler
      */
     constructor(lat, units = 'kilometers') {
-        if (lat === undefined) throw new Error('No latitude given.');
-        const factor = factors[units];
-        if (!factor) throw new Error(`Unknown unit ${units}. Use one of: ${Object.keys(factors).join(', ')}`);
+        if (typeof lat !== 'number' || Number.isNaN(lat)) throw new Error('No latitude given.');
+        if (!Object.prototype.hasOwnProperty.call(factors, units)) throw new Error(`Unknown unit ${units}. Use one of: ${Object.keys(factors).join(', ')}`);
 
         // Curvature formulas from https://en.wikipedia.org/wiki/Earth_radius#Meridional
-        const m = RAD * RE * factor;
+        const m = RAD * RE * factors[units];
         const coslat = Math.cos(lat * RAD);
         const w2 = 1 / (1 - E2 * (1 - coslat * coslat));
         const w = Math.sqrt(w2);
 
         // multipliers for converting longitude and latitude degrees into distance
         this.kx = m * w * coslat;        // based on normal radius of curvature
-        this.ky = m * w * w2 * (1 - E2); // based on meridonal radius of curvature
+        this.ky = m * w * w2 * (1 - E2); // based on meridional radius of curvature
     }
 
     /**
@@ -360,7 +358,7 @@ export default class CheapRuler {
         const l = p1.index + 1;
         const r = p2.index;
 
-        if (!equals(line[l], slice[0]) && l <= r)
+        if (l <= r && !equals(line[l], slice[0]))
             slice.push(line[l]);
 
         for (let i = l + 1; i <= r; i++) {
@@ -389,6 +387,11 @@ export default class CheapRuler {
         let sum = 0;
         const slice = [];
 
+        if (start > stop) {
+            const tmp = start;
+            start = stop;
+            stop = tmp;
+        }
         if (start < 0) start = 0;
 
         let p0 = line[0];
@@ -409,7 +412,7 @@ export default class CheapRuler {
             }
 
             if (sum >= stop) {
-                slice.push(interpolate(p0, p1, (stop - (sum - d)) / d));
+                slice.push(interpolate(p0, p1, d ? (stop - (sum - d)) / d : 0));
                 return slice;
             }
 
@@ -466,7 +469,7 @@ export default class CheapRuler {
     }
 
     /**
-     * Returns true if the given point is inside in the given bounding box, otherwise false.
+     * Returns true if the given point is inside the given bounding box, otherwise false.
      *
      * @param {readonly [number, number]} p point [longitude, latitude]
      * @param {readonly [number, number, number, number]} bbox ([w, s, e, n])
@@ -476,8 +479,11 @@ export default class CheapRuler {
      * //=inside
      */
     insideBBox(p, bbox) {
-        return wrap(p[0] - bbox[0]) >= 0 &&
-               wrap(p[0] - bbox[2]) <= 0 &&
+        // longitude offsets from the west edge in [0..360) range, so that boxes crossing the dateline work
+        const dx = ((p[0] - bbox[0]) % 360 + 360) % 360;
+        let width = bbox[2] - bbox[0];
+        if (width < 0) width += 360;
+        return dx <= width &&
                p[1] >= bbox[1] &&
                p[1] <= bbox[3];
     }

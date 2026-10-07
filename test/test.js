@@ -22,6 +22,8 @@ test('cheapRuler constructor', () => {
         const ruler = new CheapRuler();
         ruler.distance(null, null);
     }, 'errors without latitude');
+    assert.throws(() => new CheapRuler(NaN), 'errors with NaN latitude');
+    assert.throws(() => new CheapRuler(50, 'constructor'), 'errors with inherited key as unit');
 });
 
 test('distance', () => {
@@ -210,6 +212,21 @@ test('lineSliceAlong with negative start', () => {
     assert.deepEqual(slice[0], line[0], 'starts at the beginning of the line');
 });
 
+test('lineSliceAlong with stop 0 and duplicate first point', () => {
+    const slice = ruler.lineSliceAlong(0, 0, [[30, 50], [30, 50], [30.1, 50.1]]);
+    assert.deepEqual(slice, [[30, 50]]);
+});
+
+test('lineSliceAlong with start > stop', () => {
+    const line = lines[0];
+    const dist = ruler.lineDistance(line);
+    assert.deepEqual(ruler.lineSliceAlong(dist * 0.7, dist * 0.3, line), ruler.lineSliceAlong(dist * 0.3, dist * 0.7, line));
+});
+
+test('lineSlice on a single-point line', () => {
+    assert.deepEqual(ruler.lineSlice([30, 50], [31, 51], [[30.5, 50.5]]), [[30.5, 50.5]]);
+});
+
 test('lineSlice reverse', () => {
     const line = lines[0];
     const dist = ruler.lineDistance(line);
@@ -245,6 +262,16 @@ test('insideBBox', () => {
 
 test('insideBBox over dateline', () => {
     assert.ok(ruler.insideBBox([180, 32.8], [179.9, 32.7, -179.9, 32.9]));
+    assert.ok(ruler.insideBBox([-180, 32.8], [179.9, 32.7, -179.9, 32.9]));
+    assert.ok(!ruler.insideBBox([0, 32.8], [179.9, 32.7, -179.9, 32.9]));
+});
+
+test('insideBBox with a box wider than 180 degrees', () => {
+    const bbox = [-120, -10, 120, 10];
+    assert.ok(ruler.insideBBox([100, 0], bbox));
+    assert.ok(ruler.insideBBox([-100, 0], bbox));
+    assert.ok(!ruler.insideBBox([150, 0], bbox));
+    assert.ok(ruler.insideBBox([170, 0], [-180, -90, 180, 90]));
 });
 
 test('cheapRuler.fromTile', () => {
